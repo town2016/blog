@@ -88,6 +88,9 @@
         }
     }
 }
+.article-item:nth-child(2n) {
+    background-color: #f7f7f7;
+}
 .more{
     text-align: center;
     a{
@@ -98,5 +101,42 @@
         padding: 10px 0;
         // animation: ease-in;
         .animation(movex 3s linear infinite);
+    }
+}
+.answer-area{
+    .anwser-item{
+        margin-bottom: 20px;
+        padding: 10px;
+        .question {
+            font-size: 16px;
+            padding: 10px 0;
+            color: #000;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eceef0;
+        }
+        .answer{
+            padding: 10px 15px;
+            background-color: #f7f7f7;
+            li{
+                margin-bottom: 10px;
+                .flex;
+                .responseder{
+                    width: 100px;
+                    white-space: nowrap;
+                    padding: 0 10px;
+                    color: mediumblue;
+                    font-size: 16px;
+                }
+                .response{
+                    font-size: 14px;
+                    letter-spacing: 2px;
+                    line-height: 20px;
+                }
+            }
+        }
+    }
+    .anwser-item:nth-child(2n) {
+       .boxShadow(0px 0px 5px rgba(255, 92, 68, 0.8));
+       .borderRadius(4px);
     }
 }
