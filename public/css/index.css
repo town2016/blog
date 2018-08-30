@@ -1,0 +1,132 @@
+.flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.flex-v {
+  -webkit-box-orient: vertical;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+.flex-1 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+.flex-align-center {
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.flex-pack-left {
+  -webkit-box-pack: flex-start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: flex-start;
+  justify-content: flex-start;
+}
+.flex-pack-right {
+  -webkit-box-pack: flex-end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: flex-end;
+  justify-content: flex-end;
+}
+.flex-pack-center {
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+.flex-pack-justify {
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+.info {
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+.info-left {
+  width: 863px;
+  padding: 15px 20px 20px 0;
+  border-right: 1px solid #eee;
+}
+.info-left h1 {
+  font-size: 24px;
+  color: #333333;
+  font-weight: 400;
+}
+.info-left .key-words {
+  padding: 8px 20px 0 0;
+}
+.info-left .time,
+.info-left .key-words li a,
+.info-left .rating li a,
+.info-left .key-words li {
+  font-size: 14px;
+  color: #bbb;
+  line-height: 1;
+  padding-top: 8px;
+}
+.info-left .rating {
+  padding-top: 8px;
+}
+.info-left .rating li {
+  float: right;
+  padding: 0 20px;
+  border-radius: 1px solid #eee;
+}
+.info-left .rating li a {
+  display: inline-block;
+}
+.info-left .rating li embed {
+  width: 16px;
+  height: 14px;
+  display: inline-block;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+.info-left .rating li a span {
+  display: inline-block;
+  vertical-align: middle;
+}
+.info-left .key-words li {
+  float: left;
+  margin: 0 5px;
+}
+.info-left .key-words li:first-of-type {
+  margin-left: 0;
+}
+.info-left .key-words li:last-of-type {
+  margin-right: 0;
+}
+.info-right {
+  padding: 15px 0px 20px 30px;
+}
+.info-right .avatar {
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+.info-right .avatar img {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+.info-right .user-right-info {
+  margin-left: 20px;
+}
+.info-right .user-right-info .name,
+.info-right .user-right-info .job {
+  line-height: 1;
+}
+.info-right .user-right-info .job {
+  margin: 10px 0;
+}

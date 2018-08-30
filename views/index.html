@@ -1,0 +1,64 @@
+{% extends './layout.html' %} {% block header %}
+<link rel="stylesheet/less" href="/public/css/home.less" /> {% endblock %} {% block content %}
+<div class="main-content">
+  <div class="sub-title">
+    <h5>我的技术</h5>
+    <p class="desc">求知若渴，虚心若愚</p>
+  </div>
+  <div class="stack">
+    <ul class="progress clearfix">
+      {% for key, val in nav %} {% if val.name !== '首页' %}
+      <li>
+        <p class="progressName">{{val.name}}</p>
+        <div class="progressBar">
+          <a name="{{val.num}}" class="bar"><span class="number"></span></a>
+        </div>
+      </li>
+      {% endif %} {% endfor %}
+    </ul>
+  </div>
+  <div class="sub-title">
+    <h5>最新更新</h5>
+    <p class="desc">求知若渴，虚心若愚</p>
+  </div>
+  <div class="article">
+    <div class="article-item">
+      <a href="javascript:;">
+        <div class="cover">
+          <img src="/public/img/default-cover.png" />
+        </div>
+        <div class="context">
+          <p class="article-name">JS--作用域精讲</p>
+          <div class="article-intro">
+            每个函数在执行的时候都会行程一个执行期上下文，执行期上下文其实就是由多个作用域所形成的一个集合；这个集合呈链式关系，所以这个执行期上下文又被称作作用域链（作用域链里包含了函数本身的AO对象，以及函数所有父函数的AO对象，根据层级依次排练，层级越近越靠前，一直追溯到全局对象的作用域，即window对象的作用域，window对象的作用域又成全局作用域，形成的活跃对象是Global Object (本文简称GO对象)）。
+          </div>
+        </div>
+        <div class="code">
+          <img src="/public/img/code.png" />
+        </div>
+      </a>
+    </div>
+    <div class="more">
+      <a href="javascript:;"><-->&nbsp;&nbsp;More&nbsp;&nbsp;<--></a>
+    </div>
+  </div>
+  <div class="sub-title">
+    <h5>问答</h5>
+    <p class="desc">求知若渴，虚心若愚</p>
+  </div>
+</div>
+<script>
+  (function() {
+    var list = document.querySelectorAll('.bar')
+    var total = 0
+    list.forEach(item => {
+      total += Number(item.name)
+    })
+    list.forEach(item => {
+      var rate = Math.floor(Number(item.name) / total * 100)
+      item.style.width = rate + '%'
+      item.querySelector('.number').innerText = rate + '%'
+    })
+  }())
+</script>
+{% endblock %}

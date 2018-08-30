@@ -1,0 +1,109 @@
+@import url('./mixin.less');
+@-moz-keyframes rotate {
+    from {
+        .transform(rotate3D(0, 0, 1, -360deg));
+        transform-origin: center;
+        -webkit-transform-origin: center;
+        -moz-transform-origin: center;
+    }
+    to {
+        .transform(rotate3D(0, 0, 1, 360deg));
+        transform-origin: center;
+        -webkit-transform-origin: center;
+        -moz-transform-origin: center;
+    }
+}
+@-webkit-keyframes rotate {
+    from {
+        .transform(rotate3D(0, 0, 1, -360deg));
+        transform-origin: center;
+        -webkit-transform-origin: center;
+        -moz-transform-origin: center;
+    }
+    to {
+        .transform(rotate3D(0, 0, 1, 360deg));
+        transform-origin: center;
+        -webkit-transform-origin: center;
+        -moz-transform-origin: center;
+    }
+}
+@keyframes rotate {
+    from {
+        .transform(rotate3D(0, 0, 1, -360deg));
+        transform-origin: center;
+        -webkit-transform-origin: center;
+        -moz-transform-origin: center;
+    }
+    to {
+        .transform(rotate3D(0, 0, 1, 360deg));
+        transform-origin: center;
+        -webkit-transform-origin: center;
+        -moz-transform-origin: center;
+    }
+}
+@-moz-keyframes flash {
+    0% {
+        .boxShadow(0 0 10px rgba(255,255,255,0.1))
+    }
+    50% {
+        .boxShadow(0 0 30px rgba(255,255,255,0.8))
+    }
+    100% {
+        .boxShadow(0 0 10px rgba(255,255,255,0.1))
+    }
+}
+@-webkit-keyframes flash {
+    0% {
+        .boxShadow(0 0 10px rgba(255,255,255,0.1))
+    }
+    50% {
+        .boxShadow(0 0 30px rgba(255,255,255,0.8))
+    }
+    100% {
+        .boxShadow(0 0 10px rgba(255,255,255,0.1))
+    }
+}
+@keyframes flash {
+    0% {
+        .boxShadow(0 0 10px rgba(255,255,255,0.1))
+    }
+    50% {
+        .boxShadow(0 0 30px rgba(255,255,255,0.8))
+    }
+    100% {
+        .boxShadow(0 0 10px rgba(255,255,255,0.1))
+    }
+}
+@-moz-keyframes movex {
+    0% {
+        .translate(0, 0, 0)
+    }
+    50% {
+        .translate(100px, 0, 0)
+    }
+    100% {
+        .translate(0, 0, 0)
+    }
+}
+@-webkit-keyframes movex {
+    0% {
+        .translate(0, 0, 0)
+    }
+    50% {
+        .translate(100px, 0, 0)
+    }
+    100% {
+        .translate(0, 0, 0)
+    }
+}
+@keyframes movex {
+    0% {
+        .translate(0, 0, 0)
+    }
+    50% {
+        .translate(100px, 0, 0)
+    }
+    100% {
+        .translate(0, 0, 0)
+    }
+}

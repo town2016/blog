@@ -1,0 +1,163 @@
+@import url("./mixin.less");
+html,
+body {
+    width: 100%;
+    height: 100%;
+    // background: url(../img/bg.jpg) no-repeat center top;
+    background-size: 100% auto;
+    font: 14px/1.5 "PingFang SC", "Lantinghei SC", "Microsoft YaHei", "HanHei SC", "Helvetica Neue", "Open Sans", Arial, "Hiragino Sans GB", "微软雅黑", STHeiti, "WenQuanYi Micro Hei", SimSun, sans-serif;
+}
+
+.clearfix:after {
+    display: block;
+    content: '';
+    clear: both;
+}
+
+*::-webkit-scrollbar {
+    width: 6px;
+    height: 5px;
+    border-radius: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+*::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul,
+li {
+    list-style: none;
+}
+
+.wrapper {
+    min-height: 100%;
+    margin: 0 auto;
+    position: relative;
+    .body {
+        position: absolute;
+        left: 200px;
+        top: 0;
+        right: 0;
+        height: 100%;
+        overflow: auto;
+    }
+}
+
+.inner {
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.menu {
+    box-sizing: border-box;
+    width: 200px;
+    padding: 20px;
+    height: 100%;
+    overflow: auto;
+    li {
+        a {
+            display: block;
+            padding: 10px;
+            color: cornflowerblue;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+            .transition(all .5s);
+            &:hover {
+                background: aliceblue;
+            }
+        }
+    }
+    li.active {
+        a {
+            background: aliceblue;
+        }
+    }
+}
+
+.body {
+    .flex-1;
+}
+
+button {
+    background: no-repeat;
+    border: none;
+    background-color: #fff;
+    padding: 6px 20px;
+    margin: 0;
+    .borderRadius(4px);
+    font-size: 14px;
+    text-align: center;
+    line-height: 20px;
+    color: #666;
+    border: 1px solid #999;
+    .transition(all .5s);
+    &:hover{
+     color: #333;   
+    }
+}
+
+button.warning{
+    background-color: #ffe366;
+    border-color: #ffe366;
+}
+
+.banner {
+    width: 100%;
+    padding: 20px 0;
+    .borderRadius(4px);
+    overflow: hidden;
+    a {
+        display: block;
+        img {
+            display: block;
+            width: 100%;
+        }
+    }
+}
+
+.main-body {
+    width: 100%;
+    position: absolute;
+    top: 280px;
+    bottom: 0;
+    .inner {
+        position: relative;
+        min-height: 100%;
+        .sidebar {
+            width: 300px;
+            min-height: 100%;
+            background-color: #333;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+        }
+        .main-content{
+            margin: 0 0 0 300px;
+            padding: 10px 15px;
+        }
+    }
+}
+
+::-webkit-input-placeholder{
+    color: #999;
+}

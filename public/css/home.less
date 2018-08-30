@@ -1,0 +1,102 @@
+@import url('./mixin.less');
+.progress {
+    width: 100%;
+    li {
+        width: 50%;
+        float: left;
+        padding-right: 50px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        .progressName {
+            padding: 5px 0;
+        }
+        .progressBar {
+            width: 100%;
+            height: 20px;
+            .borderRadius(4px);
+            overflow: hidden;
+            background-color: #dad9dc;
+            a {
+                display: inline-block;
+                height: 100%;
+                background-color: red;
+                width: 30%;
+                position: relative;
+                span {
+                    position: absolute;
+                    display: inline-block;
+                    right: -35px;
+                    line-height: 20px;
+                }
+            }
+        }
+    }
+    li:nth-child(1) {
+        a {
+            background-color: #13c915;
+            background-image: -webkit-gradient(linear, left center, right center, from(rgba(109, 255, 109, 1)), to(rgba(4, 193, 10, 1)));
+        }
+    }
+    li:nth-child(2) {
+        a {
+            background-color: #13c915;
+            background-image: -webkit-gradient(linear, left center, right center, from(rgba(253, 140, 180, 1)), to(rgba(255, 80, 144, 1)));
+        }
+    }
+    li:nth-child(3) {
+        a {
+            background-color: #13c915;
+            background-image: -webkit-gradient(linear, left center, right center, from(rgba(255, 199, 113, 1)), to(rgba(255, 163, 31, 1)));
+        }
+    }
+    li:nth-child(4) {
+        a {
+            background-color: #13c915;
+            background-image: -webkit-gradient(linear, left center, right center, from(rgba(135, 238, 255, 1)), to(rgba(0, 186, 211, 1)));
+        }
+    }
+}
+
+.article-item {
+    a {
+        .flex;
+        .flex-align-center;
+        padding: 20px 10px;
+        .cover {
+            width: 120px;
+            height: 150px;
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .context {
+            .flex-1;
+            padding: 0 20px;
+            color: #333;
+            height: 150px;
+            overflow: hidden;
+        }
+        .code {
+            width: 150px;
+            height: 150px;
+            img {
+                display: block;
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+}
+.more{
+    text-align: center;
+    a{
+        display: block;
+        line-height: 20px;
+        font-size: 15px;
+        color: #ff5c44;
+        padding: 10px 0;
+        // animation: ease-in;
+        .animation(movex 3s linear infinite);
+    }
+}
