@@ -6,4 +6,4 @@ let userSchema = new Schema({
   password: String
 })
 
-module.exports userSchema
+module.exports = userSchema

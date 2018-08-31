@@ -8,7 +8,11 @@
     <link rel="stylesheet/less" type="text/css" href="/public/css/animate.less" />
     <link rel="stylesheet/less" type="text/css" href="/public/css/index.less" />
     {% block header %}{% endblock %}
+    <script src="/public/js/axios.min.js" ></script>
+    <script src="/public/js/jquery-1.11.0.js" ></script>
+    <script src="/public/utils/$http.js" ></script>
     <script src="/public/js/less.min.js"></script>
+    <script src="/public/js/layout.js" ></script>
   </head>
 
   <body>
@@ -106,13 +110,13 @@
             <div class="form-group">
               <label>qustion</label>
               <div class="form-control">
-                <input placeholder="please input questions" />
+                <input placeholder="please input questions" name="question"/>
               </div>
             </div>
             <div class="form-group">
               <label>category</label>
               <div class="form-control">
-                <select placeholder='please select category'>
+                <select placeholder='please select category' name='category'>
                   <option value="h5">h5</option>
                   <option value="css">css</option>
                   <option value="native">js</option>
@@ -123,12 +127,12 @@
             <div class="form-group">
               <label>description</label>
               <div class="form-control">
-                <textarea placeholder="please make a description of question"></textarea>
+                <textarea placeholder="please make a description of question" name='description'></textarea>
               </div>
             </div>
           </form>
           <div class="button">
-            <button class="warning">submit</button>
+            <button class="warning" onclick='goQuestion()'>submit</button>
             <button onclick="_closeDialog()">cancel</button>
           </div>
         </div>
@@ -144,6 +148,53 @@
       document.getElementById('questionForm').reset()
       document.querySelector('.mask').classList.remove('active')
     }
+    
+    document.querySelector('.body').addEventListener('click', function (event) {
+      event = event || window.event
+      event.stopPropagation()
+    }, false)
+    
+    // 表单验证
+    function autoValidate (elem) {
+      elem.addEventListener('change', function (event) {
+        event = event || window.event
+        if (!event.target.value) {
+          elem.parentElement.classList.add('error')
+        } else {
+          elem.parentElement.classList.remove('error')
+        }
+      }, false)
+    }
+    // 表单验证错误提示
+    function tips (elem, message) {
+      elem.parentElement.classList.add('error')
+    }
+    // 提交提问
+    function goQuestion (event) {
+      event = event || window.event
+      event.stopPropagation()
+      var forms = document.getElementById('questionForm').elements
+      var params = {}
+      var valid = true
+      for (var i = 0; i < forms.length; i++) {
+        var item = forms[i]
+        params[item.name] = item.value
+        if (!item.value) {
+          valid = false
+          autoValidate(item)
+          tips(item, item.name + '为必填项')
+        }
+      }
+      if (valid) {
+        let res = questionSubmit(params).then(res => {
+          if (res.data.code === 200) {
+            alert(res.data.message)
+            _closeDialog()
+          }
+        })
+      }
+    }
+    
   </script>
 
 </html>

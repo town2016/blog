@@ -66,36 +66,32 @@
     <p class="desc">求知若渴，虚心若愚</p>
   </div>
   <div class="answer-area">
+    {% for key, answer in questions %}
     <div class="anwser-item">
       <a href="javascript:;">
-        <h5 class="question">Vue的学习路径</h5>
+        <h5 class="question">{{answer.question}}</h5>
       </a>
+      <div>
+        
+      </div>
+      <div class="description">
+        <ul>
+          <li>
+            <div class="responseder">问题描述：</div>
+            <div class="response">{{answer.description}}</div>
+          </li>
+        </ul>
+      </div>
       <div class="answer">
         <ul>
           <li>
-            <div class="responseder">town：</div>
-            <div class="response">
-              Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径
-            </div>
+            <div class="responseder">答(town)：</div>
+            <div class="response">{{answer.description}}</div>
           </li>
         </ul>
       </div>
     </div>
-    <div class="anwser-item">
-      <a href="javascript:;">
-        <h5 class="question">JS的学习路径</h5>
-      </a>
-      <div class="answer">
-        <ul>
-          <li>
-            <div class="responseder">town：</div>
-            <div class="response">
-              Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径Vue的学习路径
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
+    {% endfor %}
     <div class="more">
       <a href="javascript:;">
         <-->&nbsp;&nbsp;More&nbsp;&nbsp;

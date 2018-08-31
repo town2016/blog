@@ -1,6 +1,7 @@
 const express = require('express')
 const swig = require('swig') // 加载模板引擎
 const mongoose = require('mongoose') // 加载数据库操作模块
+const bodyParser = require('body-parser') // 加载请求体的解析插件
 const app = express()
 // 设置模板路径
 app.set('views', './views')
@@ -12,6 +13,8 @@ app.set('view engine', 'html')
 swig.setDefaults({cache: false})
 // 配置静态文件路径
 app.use('/public', express.static(__dirname + '/public'))
+// bodyParser配置
+app.use(bodyParser.urlencoded({ extended: true }))
 // 初始化并连接数据库
 mongoose.connect('mongodb://localhost:27017/blog', function (err) {
   if (err) {
@@ -23,30 +26,41 @@ mongoose.connect('mongodb://localhost:27017/blog', function (err) {
     })
   }
 })
+
+app.use('/api', require('./routers/api'))
+
+const Question = require('./models/Question')
+
 app.get('/', function (req, res, next) {
-  res.render('index', {
-    title: 'town-blog',
-    nav: [
-      {
-        name: '首页',
-        path: '/'
-      }, {
-        name: 'H5',
-        path: '/h5',
-        num: 18
-      }, {
-        name: 'CSS',
-        path: '/css',
-        num: 21
-      }, {
-        name: 'JS',
-        path: '/native',
-        num: 50
-      }, {
-        name: 'NODE',
-        path: '/node',
-        num: 22
+  Question.find().then(function (list) {
+    let responseData = {
+        title: 'town-blog',
+        questions: list,
+        nav: [
+          {
+            name: '首页',
+            path: '/'
+          }, {
+            name: 'H5',
+            path: '/h5',
+            num: 18
+          }, {
+            name: 'CSS',
+            path: '/css',
+            num: 21
+          }, {
+            name: 'JS',
+            path: '/native',
+            num: 50
+          }, {
+            name: 'NODE',
+            path: '/node',
+            num: 22
+          }
+        ]
       }
-    ]
+      res.render('index', responseData)
   })
 })
+
+

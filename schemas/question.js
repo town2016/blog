@@ -3,7 +3,9 @@ let Schema = mongoose.Schema
 
 let questionSchema = new Schema({
   question: String,
-  answer: String
+  answer: String,
+  category: String,
+  description: String
 })
 
-module.exports questionSchema
+module.exports = questionSchema

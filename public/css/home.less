@@ -99,7 +99,6 @@
         font-size: 15px;
         color:#6495ED;
         padding: 10px 0;
-        // animation: ease-in;
         .animation(movex 3s linear infinite);
     }
 }
@@ -114,7 +113,7 @@
             margin-bottom: 10px;
             border-bottom: 1px solid #eceef0;
         }
-        .answer{
+        .answer, .description{
             padding: 10px 15px;
             background-color: #f7f7f7;
             li{
@@ -128,15 +127,35 @@
                     font-size: 16px;
                 }
                 .response{
-                    font-size: 14px;
+                    font-size: 12px;
                     letter-spacing: 2px;
                     line-height: 20px;
+                    color: #333;
                 }
+            }
+        }
+        .description{
+            background-color: #fff;
+            .responseder{
+                color: #333 !important;
+                font-size: 14px !important;
+                line-height: 20px;
+            }
+            .response{
+                font-size: 14px !important;
+                letter-spacing: 2px;
+                line-height: 20px;
+                color: #333;
             }
         }
     }
     .anwser-item:nth-child(2n) {
        .boxShadow(0px 0px 5px rgba(255, 92, 68, 0.8));
        .borderRadius(4px);
+    }
+    .more {
+        a {
+            .animation(movex 3s 1.5s linear infinite);
+        }
     }
 }
