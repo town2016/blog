@@ -16,7 +16,7 @@ app.use('/public', express.static(__dirname + '/public'))
 // bodyParser配置
 app.use(bodyParser.urlencoded({ extended: true }))
 // 初始化并连接数据库
-mongoose.connect('mongodb://localhost:27017/blog', function (err) {
+mongoose.connect('mongodb://localhost:27017/blog', {useNewUrlParser:true}, function (err) {
   if (err) {
     console.log('数据库连接失败')
   } else {
@@ -26,6 +26,7 @@ mongoose.connect('mongodb://localhost:27017/blog', function (err) {
     })
   }
 })
+mongoose.Promise = global.Promise
 
 app.use('/api', require('./routers/api'))
 

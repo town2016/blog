@@ -188,8 +188,7 @@
       if (valid) {
         let res = questionSubmit(params).then(res => {
           if (res.data.code === 200) {
-            alert(res.data.message)
-            _closeDialog()
+            location.reload()
           }
         })
       }
