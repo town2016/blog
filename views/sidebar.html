@@ -1,6 +1,6 @@
 <div class="sidebar">
   <div class="music">
-    <div class="control">
+    <div class="control" id="audioControl" onclick='playTogger()'>
       <img src="/public/img/f7e4a6e990a9a4a2866ebba9b1709b2e.png" />
     </div>
     <p class="singer">{{liudehua}}</p>
@@ -29,4 +29,15 @@
       }
     })
   }())
+  function playTogger (event) {
+    let player = document.getElementById('player')
+    let control = document.getElementById('audioControl')
+    if (player.paused) {
+      player.play()
+      control.classList.add('play')
+    } else {
+      player.pause()
+      control.classList.remove('play')
+    }
+  }
 </script>

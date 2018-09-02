@@ -13,6 +13,7 @@
   "author": "town",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "^1.15.2",
     "cookies": "^0.6.1",
     "express": "^4.16.3",

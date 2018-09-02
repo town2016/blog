@@ -29,7 +29,7 @@
         <div class="inner flex">
           <div class="info-left">
             <h1>town 个人博客</h1>
-            <p class="time">300天之前发布</p>
+            <p class="time">{{dateLength}}天之前发布</p>
             <div class="flex">
               <div class="key-words clearfix">
                 <ul>
@@ -57,13 +57,13 @@
                   <li>
                     <a href="javascript:;">
                       <embed src='/public/img/svg/card-pinglun.svg' type="image/svg+xml" width="16" height="14"></embed>
-                      <span>10</span>
+                      <span>{{questions.length}}</span>
                     </a>
                   </li>
                   <li>
                     <a href="javascript:;">
                       <embed src='/public/img/svg/card-liulan.svg' type="image/svg+xml" width="16" height="14"></embed>
-                      <span>3000</span>
+                      <span>{{viewCount}}</span>
                     </a>
                   </li>
                 </ul>
@@ -138,6 +138,7 @@
         </div>
       </div>
     </div>
+    <audio src="" id="player" ></audio>
   </body>
   <script>
     function _openDialog() {
@@ -193,7 +194,26 @@
         })
       }
     }
-    
+    // 提交浏览数据
+    visitSubmit()
+    // 拉取歌曲列表
+    getSongList().then(res => {
+      let list = res.data.req_0.data.midurlinfo
+      let player = document.getElementById('player')
+      let control = document.getElementById('audioControl')
+      player.src = list[0].purl
+      player.name = 0
+      player.play()
+      control.classList.add('play')
+      player.addEventListener('ended', function () {
+        var index = player.name*1 + 1
+        if (index >= list.length) {
+          index = 0
+        }
+        player.name = index
+        player.src = list[index].purl
+      }, false)
+    })
   </script>
 
 </html>
