@@ -41,7 +41,7 @@ const blog_createTime = new Date('2018-08-08').getTime()
 const Question = require('./models/Question')
 const ClientIP = require('./models/ClientIP')
 app.get('/', function (req, res, next) {
-  Question.find().then(function (list) {
+  Question.find().limit(3).then(function (list) {
     ClientIP.find({}, function (err, views) {
       let count = 0
       if (err) {

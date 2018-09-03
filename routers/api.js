@@ -20,8 +20,7 @@ router.post('/question', function (req, res, next) {
   })
 })
 router.get('/question', function(req, res, next) {
-  Question.find().then(function (list) {
-    console.log(err)
+  Question.find().limit(5).skip(0).then(function (list) {
     if (err) {
       response.message = err
       res.json(response)
