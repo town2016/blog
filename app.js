@@ -41,46 +41,52 @@ const blog_createTime = new Date('2018-08-08').getTime()
 const Question = require('./models/Question')
 const ClientIP = require('./models/ClientIP')
 app.get('/', function (req, res, next) {
-  Question.find().limit(3).then(function (list) {
-    ClientIP.find({}, function (err, views) {
-      let count = 0
-      if (err) {
-        response.message = err
-      } else {
-        views.forEach(item => {
-          count += item.count
-        })
-      }
-      let responseData = {
-        title: 'town-blog',
-        questions: list,
-        dateLength: Math.ceil((new Date().getTime() - blog_createTime) / 86400000),
-        viewCount: count,
-        nav: [
-          {
-            name: '首页',
-            path: '/'
-          }, {
-            name: 'H5',
-            path: '/h5',
-            num: 18
-          }, {
-            name: 'CSS',
-            path: '/css',
-            num: 21
-          }, {
-            name: 'JS',
-            path: '/native',
-            num: 50
-          }, {
-            name: 'NODE',
-            path: '/node',
-            num: 22
+  Question.count({}, function (err, count) {
+    if (err) {
+      console.log(err)
+    } else {
+      Question.find().limit(3).then(function (list) {
+        ClientIP.find({}, function (err, views) {
+          let count = 0
+          if (err) {
+            response.message = err
+          } else {
+            views.forEach(item => {
+              count += item.count
+            })
           }
-        ]
-      }
-      res.render('index', responseData)
-    })
-    
+          let responseData = {
+            title: 'town-blog',
+            questions: list,
+            questionCount: count,
+            dateLength: Math.ceil((new Date().getTime() - blog_createTime) / 86400000),
+            viewCount: count,
+            nav: [
+              {
+                name: '首页',
+                path: '/'
+              }, {
+                name: 'H5',
+                path: '/h5',
+                num: 18
+              }, {
+                name: 'CSS',
+                path: '/css',
+                num: 21
+              }, {
+                name: 'JS',
+                path: '/native',
+                num: 50
+              }, {
+                name: 'NODE',
+                path: '/node',
+                num: 22
+              }
+            ]
+          }
+          res.render('index', responseData)
+        })
+      })  
+    }
   })
 })
