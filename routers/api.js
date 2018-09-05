@@ -12,6 +12,8 @@ router.use(function (req, res, next) {
   }
   next()
 })
+
+// 提交问题
 router.post('/question', function (req, res, next) {
   let question = new Question(req.body)
   question.save().then( function (user) {
@@ -19,6 +21,11 @@ router.post('/question', function (req, res, next) {
     res.json(response)
   })
 })
+/*
+ 拉取问题列表
+ limit 每页返回天数
+ skip 从第几条开始查询
+ * */
 router.get('/question', function(req, res, next) {
   Question.find().limit(5).skip(0).then(function (list) {
     if (err) {
@@ -52,6 +59,7 @@ const  query = {
   "cv":0}
 }
 
+// 从QQ音乐拉取歌曲列表
 router.get('/songList', function (req, res, next) {
   let url = 'https://u.y.qq.com/cgi-bin/musicu.fcg?_=1535905775943'
   axios.post(url, query, 
@@ -68,6 +76,7 @@ router.get('/songList', function (req, res, next) {
   })
 })
 
+// 获取客户端IP
 function getClientIp (req) {
     var ipAddress;
     var forwardIpStr = req.headers['x-forwarded-for'];
@@ -100,6 +109,7 @@ function getClientIp (req) {
     return ipAddress;
 }
 
+// 记录浏览次数
 router.post('/visit', function (req, res, next) {
   let ip = getClientIp(req).split("::ffff:")[1]
   ClientIP.findOne({ip:ip}, function (err, record) {

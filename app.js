@@ -41,7 +41,7 @@ const blog_createTime = new Date('2018-08-08').getTime()
 const Question = require('./models/Question')
 const ClientIP = require('./models/ClientIP')
 app.get('/', function (req, res, next) {
-  Question.count({}, function (err, count) {
+  Question.count({}, function (err, questionCount) {
     if (err) {
       console.log(err)
     } else {
@@ -58,7 +58,7 @@ app.get('/', function (req, res, next) {
           let responseData = {
             title: 'town-blog',
             questions: list,
-            questionCount: count,
+            questionCount: questionCount,
             dateLength: Math.ceil((new Date().getTime() - blog_createTime) / 86400000),
             viewCount: count,
             nav: [
