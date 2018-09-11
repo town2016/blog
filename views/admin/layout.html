@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>后台管理系统</title>
+		<link rel="stylesheet/less" type="text/css" href="/public/css/reset.less" />
+		<link rel="stylesheet/less" type="text/css" href="/public/css/admin.less"/>
+		{% block head %}{% endblock %}
+		<script src="/public/js/table.js"></script>
+		<script src="/public/js/less.min.js"></script>
+	</head>
+	<body>
+	  <div class="wrapper">
+	    <div class="toper">
+	      <h1>博客后台管理系统</h1>
+	    </div>
+	    <div class="container">
+	      <div class="sideBar">
+	        <ul>
+	          <li>
+	            <a href="admin/category">分类</a>
+	          </li>
+	        </ul>
+	      </div>
+	      <div class="content">
+	        {% block content %}{% endblock %}
+	      </div>
+	    </div>
+	  </div>
+	</body>
+</html>

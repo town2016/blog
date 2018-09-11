@@ -1,0 +1,62 @@
+{% extends './layout.html' %} 
+{% block content %}
+<script>
+  const tableModel = [
+    {
+      prop: 'categoryName',
+      label: '分类名称'
+    }, {
+      prop: 'categoryCode',
+      label: '分类编码'
+    }, {
+      prop: 'createTime',
+      label: '创建时间'
+    }, {
+      prop: 'updateTime',
+      label: '更新时间'
+    }, {
+      prop: '_actions',
+      label: '操作',
+      formatter: function () {}
+    }
+  ]
+  const tableData = [
+    {
+      categoryName: 'H5'
+    }
+  ]
+</script>
+<div class="sub-title">
+  分类管理
+</div>
+<div class="content-inner">
+  <div class="list">
+    <div class="itable"></div>
+    <script>
+      let el = document.querySelector('.list').querySelector('.itable')
+      table = new Table(tableModel, tableData, el)
+      table.create()
+    </script>
+  </div>
+  <div style="width: 70%;">
+    <form id="category-form form">
+      <div class="form-group">
+        <lable class="form-label">类别名称</lable>
+        <div class="form-control">
+          <input type="text"  placeholder="请输入类别名称"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <lable class="form-label">类别编码</lable>
+        <div class="form-control">
+          <input type="text" placeholder="请输入类别编码"/>
+        </div>
+      </div>
+      <div class="form-btns">
+        <span class="submit-btn">保存</span>
+        <span class="reset-btn">重置</span>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

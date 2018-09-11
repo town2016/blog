@@ -37,6 +37,7 @@ mongoose.connect('mongodb://localhost:27017/blog', {useNewUrlParser:true}, funct
 mongoose.Promise = global.Promise
 
 app.use('/api', require('./routers/api'))
+app.use('/admin', require('./routers/admin'))
 const blog_createTime = new Date('2018-08-08').getTime()
 const Question = require('./models/Question')
 const ClientIP = require('./models/ClientIP')
