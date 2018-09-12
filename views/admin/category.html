@@ -1,59 +1,9 @@
 {% extends './layout.html' %}
 {% block head %}
+<script src="/public/utils/validate.js"></script>
 <script src="/public/js/admin/category.js"></script>
 {% endblock %}
 {% block content %}
-<script>
-  const tableModel = [
-    {
-      prop: 'categoryName',
-      label: '分类名称'
-    }, {
-      prop: 'categoryCode',
-      label: '分类编码'
-    }, {
-      prop: 'count',
-      label: '文章挂载量'
-    }, {
-      prop: 'createTime',
-      label: '创建时间'
-    }, {
-      prop: 'updateTime',
-      label: '更新时间'
-    }, {
-      prop: '_actions',
-      label: '操作',
-      width: 120,
-      formatter: function (h, params) {
-        return h('div', {
-          class: {
-            'table-btns': true
-          },
-          children: [
-            h('span', {
-              class: {
-                'btn-text': true
-              },
-              on: {
-                click: function () {}
-              }
-            }, '编辑'),
-            h('span', {
-              class: {
-                'btn-text': true
-              },
-              on: {
-                click: function () {
-                  deletes(params)
-                }
-              }
-            }, '删除')
-          ]
-        })
-      }
-    }
-  ]
-</script>
 <div class="sub-title">
   分类管理
 </div>
@@ -69,13 +19,13 @@
       <div class="form-group">
         <lable class="form-label">类别名称</lable>
         <div class="form-control">
-          <input type="text"  placeholder="请输入类别名称" name='categoryName'/>
+          <input type="text" id="categoryName"  placeholder="请输入类别名称" name='categoryName' data-required/>
         </div>
       </div>
       <div class="form-group">
         <lable class="form-label">类别编码</lable>
         <div class="form-control">
-          <input type="text" placeholder="请输入类别编码" name='categoryCode'/>
+          <input type="text" placeholder="请输入类别编码" name='categoryCode' data-required/>
         </div>
       </div>
       <div class="form-btns">
@@ -86,6 +36,7 @@
   </div>
 </div>
 <script>
+  const cateForm = document.getElementById("category-form")
   // 创建分类表格
   let  table
   createCategoryTable()
@@ -103,7 +54,8 @@
   }
   // 保存分类信息
   function save () {
-    var elems = document.querySelector('#category-form'),elements
+    if (!validator.check()) return
+    var elems = cateForm,elements
     var params = {}
     for (var i = 0; i < elems.length; i++) {
       var item = elems[i]
@@ -118,12 +70,13 @@
   }
   // 删除分类信息
   function deletes (params) {
-    deleteCategory({id: params.id}).then(res => {
+    deleteCategory({id: params._id}).then(res => {
       if (res.data.code === 200) {
         alert(res.data.message)
         getCategorys()
       }
     })
   }
+  var validator = new Validater(cateForm)
 </script>
 {% endblock %}

@@ -117,7 +117,9 @@ router.post('/visit', function (req, res, next) {
       record.update({updateTime: new Date(), count: record.count*1 + 1}, function (err, data) {
         if (err) {
           response.message = err
-        }        
+        } else {
+          response.message = '操作成功'
+        }
         res.json(response)
       })
     } else {

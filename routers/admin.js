@@ -82,7 +82,7 @@ router.post('/saveCategory', function (req, res, next) {
 // 删除
 router.get('/deleteCategory', function (req, res, next) {
   let id = req.query.id
-  Category.deleteOne({id: id}, function (err) {
+  Category.remove({_id: id}, function (err) {
     if (err) {
       response.code = 500
       response.message = '操作失败'

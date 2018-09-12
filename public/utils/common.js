@@ -74,38 +74,63 @@ eventHandler = {
     return ev;
   },
   // 获取指定父级对象
-  getParent: function () {
-    var el = arguments[0], sign = arguments[1];
-    if (!el) throw new Error('请传入要获取父节点的对象')
-    if (!sign) throw new Error('请传入父节点的标识')
-    var type = sign.charAt(0) === '.' ? 'class' : sign.charAt(0) === '#' ? 'id' : 'tag', parent = el.parentNode
-    if (parent === document) {
+  getParent: function() {
+    var el = arguments[0],
+      sign = arguments[1];
+    if(!el) throw new Error('请传入要获取父节点的对象')
+    if(!sign) throw new Error('请传入父节点的标识')
+    var type = sign.charAt(0) === '.' ? 'class' : sign.charAt(0) === '#' ? 'id' : 'tag',
+      parent = el.parentNode
+    if(parent === document) {
       return document.querySelector('html')
     }
-    switch (type) {
+    switch(type) {
       case 'class':
-        if (parent.classList.contains(sign)) return parent
+        if(parent.classList.contains(sign)) return parent
         return arguments.callee(parent, sign)
-      break;
+        break;
       case 'id':
-        if (parent.id === sign) return parent
+        if(parent.id === sign) return parent
         return arguments.callee(parent, sign)
-      break;
+        break;
       default:
-        if (parent.tagName === sign.toUpperCase()) return parent
+        if(parent.tagName === sign.toUpperCase()) return parent
         return arguments.callee(parent, sign)
     }
+  },
+  dataset: function(element) {
+    var obj = {};
+    if(element.dataset) {
+      return element.dataset;
+    } else {
+      // console.log(element.attributes);
+      for(var i = 0; i < element.attributes.length; i++) {
+        var key = element.attributes[i].nodeName;
+        if(/^data-\w+$/.test(key)) { //判断是否以data-开头的属性名
+          var value = element.attributes[i].nodeValue; //值
+          var keyName = key.match(/^data-(\w+)/)[1]; //键名
+          obj[keyName] = value; //对象添加属性
+        }
+      }
+    }
+    return obj;
   }
 };
 
 /*
  重置表单
  * */
-function resetForm (event) {
-  var ev = eventHandler.getEvent(event), target = eventHandler.getTarget(ev), form = eventHandler.getParent(target, 'form')
-  try{
-  	form.reset()
-  }catch(e){
-  	console.log('未找到指定的form')
+function resetForm(event) {
+  var ev = eventHandler.getEvent(event),
+    target = eventHandler.getTarget(ev),
+    form = eventHandler.getParent(target, 'form')
+  try {
+    form.reset()
+    var errorList = form.querySelectorAll(".error-tip")
+    for (var i = 0; i < errorList.length; i++) {
+      errorList[i].remove()
+    }
+  } catch(e) {
+    console.log('未找到指定的form')
   }
 }

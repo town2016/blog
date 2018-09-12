@@ -77,9 +77,8 @@ form{
     .form-control{
         margin: 0 0 0 160px;
         box-sizing: border-box;
-        border-radius: 4px;
+        .borderRadius(4px);
         border: 1px solid #cecece;
-        overflow: hidden;
         input{
             width: 100%;
             font-size: 14px;
@@ -87,6 +86,7 @@ form{
             border: none;
             outline: none;
             box-sizing: border-box;
+            .borderRadius(4px);
         }
     }
 }
@@ -161,3 +161,14 @@ form{
     width: 100%;
 }
 
+.required{
+    position: relative;
+    &:after{
+        content: '*';
+        display: block;
+        position: absolute;
+        right: -10px;
+        top: 3px;
+        color: red;
+    }
+}
