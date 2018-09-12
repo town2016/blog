@@ -72,5 +72,40 @@ eventHandler = {
       }
     }
     return ev;
+  },
+  // 获取指定父级对象
+  getParent: function () {
+    var el = arguments[0], sign = arguments[1];
+    if (!el) throw new Error('请传入要获取父节点的对象')
+    if (!sign) throw new Error('请传入父节点的标识')
+    var type = sign.charAt(0) === '.' ? 'class' : sign.charAt(0) === '#' ? 'id' : 'tag', parent = el.parentNode
+    if (parent === document) {
+      return document.querySelector('html')
+    }
+    switch (type) {
+      case 'class':
+        if (parent.classList.contains(sign)) return parent
+        return arguments.callee(parent, sign)
+      break;
+      case 'id':
+        if (parent.id === sign) return parent
+        return arguments.callee(parent, sign)
+      break;
+      default:
+        if (parent.tagName === sign.toUpperCase()) return parent
+        return arguments.callee(parent, sign)
+    }
   }
 };
+
+/*
+ 重置表单
+ * */
+function resetForm (event) {
+  var ev = eventHandler.getEvent(event), target = eventHandler.getTarget(ev), form = eventHandler.getParent(target, 'form')
+  try{
+  	form.reset()
+  }catch(e){
+  	console.log('未找到指定的form')
+  }
+}

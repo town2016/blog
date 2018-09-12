@@ -93,24 +93,35 @@ form{
 
 .form-btns{
     padding-left: 160px;
-    span{
-        display: inline-block;
-        padding: 8px 15px;
-        font-size: 14px;
-        border-style: solid;
-        border-width: 1px;
-        border-radius: 4px;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        cursor:default;
-    }
 }
-.submit-btn{
+.btn-group{
+    padding: 10px 0;
+}
+.btn{
+    display: inline-block;
+    padding: 5px 15px;
+    font-size: 14px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    cursor: default;
+}
+.btn:hover{
+    .opacity(0.8)
+}
+.btn.btn-success{
+    background-color: #67c23a;
+    border-color: #67c23a;
+    color: #fff;
+}
+.btn.btn-primary{
     background-color: #409EFF;
     border-color: #409EFF;
     color: #fff;
 }
-.reset-btn{
+.btn.btn-default{
     border-color: #333;
 }
 .itable{

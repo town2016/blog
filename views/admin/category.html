@@ -1,4 +1,7 @@
-{% extends './layout.html' %} 
+{% extends './layout.html' %}
+{% block head %}
+<script src="/public/js/admin/category.js"></script>
+{% endblock %}
 {% block content %}
 <script>
   const tableModel = [
@@ -8,6 +11,9 @@
     }, {
       prop: 'categoryCode',
       label: '分类编码'
+    }, {
+      prop: 'count',
+      label: '文章挂载量'
     }, {
       prop: 'createTime',
       label: '创建时间'
@@ -29,14 +35,17 @@
                 'btn-text': true
               },
               on: {
-                click: function () {
-                  console.log(params)
-                }
+                click: function () {}
               }
             }, '编辑'),
             h('span', {
               class: {
                 'btn-text': true
+              },
+              on: {
+                click: function () {
+                  deletes(params)
+                }
               }
             }, '删除')
           ]
@@ -44,43 +53,77 @@
       }
     }
   ]
-  const tableData = [
-    {
-      categoryName: 'h5'
-    }
-  ]
 </script>
 <div class="sub-title">
   分类管理
 </div>
 <div class="content-inner">
+  <div class="btn-group">
+    <span class="btn btn-success">新增</span>
+  </div>
   <div class="list">
     <div class="itable"></div>
-    <script>
-      let el = document.querySelector('.list').querySelector('.itable')
-      table = new Table(tableModel, tableData, el)
-      table.create()
-    </script>
   </div>
   <div style="width: 70%;">
-    <form id="category-form form">
+    <form id="category-form" class="form">
       <div class="form-group">
         <lable class="form-label">类别名称</lable>
         <div class="form-control">
-          <input type="text"  placeholder="请输入类别名称"/>
+          <input type="text"  placeholder="请输入类别名称" name='categoryName'/>
         </div>
       </div>
       <div class="form-group">
         <lable class="form-label">类别编码</lable>
         <div class="form-control">
-          <input type="text" placeholder="请输入类别编码"/>
+          <input type="text" placeholder="请输入类别编码" name='categoryCode'/>
         </div>
       </div>
       <div class="form-btns">
-        <span class="submit-btn">保存</span>
-        <span class="reset-btn">重置</span>
+        <span class="btn-primary btn" onclick="save()">保存</span>
+        <span class="btn-default btn" onclick="resetForm()" id="reset">重置</span>
       </div>
     </form>
   </div>
 </div>
+<script>
+  // 创建分类表格
+  let  table
+  createCategoryTable()
+  function createCategoryTable () {
+    let el = document.querySelector('.list').querySelector('.itable')
+    table = new Table(tableModel, [], el)
+    table.create()
+  }
+  // 拉取分类列表
+  getCategorys()
+  function getCategorys () {
+    getCategoryList().then(res => {
+      table.tableData = res.data.data
+    })
+  }
+  // 保存分类信息
+  function save () {
+    var elems = document.querySelector('#category-form'),elements
+    var params = {}
+    for (var i = 0; i < elems.length; i++) {
+      var item = elems[i]
+      params[item.name] = item.value
+    }
+    saveCategory(params).then(res => {
+      if (res.data.code === 200) {
+        getCategorys()
+        document.querySelector("#reset").click()
+      }
+    })
+  }
+  // 删除分类信息
+  function deletes (params) {
+    deleteCategory({id: params.id}).then(res => {
+      if (res.data.code === 200) {
+        alert(res.data.message)
+        getCategorys()
+      }
+    })
+  }
+</script>
 {% endblock %}

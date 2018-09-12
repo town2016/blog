@@ -1,9 +1,9 @@
 // 创建表格对象
 function Table (model, data, el) {
   return {
-    id: new Date().getTime(),
+    id: 't_' + new Date().getTime(),
     tableModel: model || [],
-    tableData: data || [],
+    tableList: data || [],
     parent: el,
     create: function () {
       let table = document.createElement('table')
@@ -15,7 +15,15 @@ function Table (model, data, el) {
     createThead: createThead,
     createTbody: createTbody,
     createTd: createTd,
-    render: render
+    render: render,
+    refreshData: refreshData,
+    set tableData (list) {
+      this.tableList = list
+      this.refreshData()
+    },
+    get tableData () {
+      return this.tableList
+    }
   }
 }
 // 创建表头
@@ -34,11 +42,11 @@ function createThead () {
 // 创建表格主体
 function createTbody () {
   let tbody = createElemetNode('tbody');
-  if (this.tableData.length === 0) {
-    tbody.innerHTML = `<tr><td colSpan='${this.tableModel.length}' align='center'><font color='#aaa'>暂无数据</font></td><tr>`
+  if (this.tableList.length === 0) {
+    tbody.innerHTML = `<tr><td colSpan='${this.tableModel.length}' align='center' style='font-size: 16px;'><font color='#aaa'>暂无数据</font></td><tr>`
     return tbody
   }
-  this.tableData.map((row, index) => {
+  this.tableList.map((row, index) => {
     var tr = createElemetNode('tr')
     tbody.appendChild(tr, this.createTd(tr, row))
   })
@@ -52,7 +60,7 @@ function createTd (tr, data) {
       td.appendChild(item.formatter(this.render, data))
       tr.appendChild(td)
     } else {
-      var td = createElemetNode('td', null, data[item.prop] ? data[item.prop] : '')
+      var td = createElemetNode('td', null, data[item.prop] === undefined || data[item.prop] === null ? '' : data[item.prop])
       tr.appendChild(td)
     }
   })
@@ -62,7 +70,7 @@ function createTd (tr, data) {
 function createElemetNode (tag, classes = null, innerText) {
   let elem = document.createElement(tag)
   if (classes) elem.className = addClass(classes)
-  if (innerText) elem.innerText = innerText
+  if (innerTexts = innerText !== undefined && innerText !== null ) elem.innerText = innerText
   return elem
 }
 
@@ -88,7 +96,7 @@ function render (el, options, text) {
   }
   return elem
 }
-
+// 绑定class
 function addClass (classObj) {
   let classArr = []
   for (var k in classObj) {
@@ -96,11 +104,14 @@ function addClass (classObj) {
   }
   return classArr.join(' ')
 }
-
+// 事件绑定
 function bindEvent (el, type, fn) {
-  switch (type) {
-    case 'click':
-    eventHandler.addEvent(el, 'click', fn)
-    break
-  }
+  eventHandler.addEvent(el, type, fn)
+}
+// 数据刷新
+function refreshData () {
+  var table = document.querySelector('#' + this.id)
+  let tbody = this.createTbody()
+  table.querySelector('tbody').remove()
+  table.appendChild(tbody)
 }
