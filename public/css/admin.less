@@ -115,6 +115,7 @@ form{
 }
 .itable{
     margin: 22px 0;
+    table-layout: fixed;
     table{
         border: 1px solid #eee;
         width: 100%;
@@ -122,15 +123,30 @@ form{
         td, th{
             border: 1px solid #eee;
             border-collapse: collapse;
-            padding: 10px 15px;
             text-align: center;
+            .table-btns{
+                span{
+                    display: inline-block;
+                    padding: 6px 12px;
+                    cursor: pointer;
+                    font-size: 12px;
+                }
+                .btn-text {
+                    color: #409EFF;
+                }
+            }
         }
         th{
-            color: #999;
+            padding: 12px 10px;
+            color: #909399;
+            font-weight: 600;
         }
         td{
+            padding: 6px 10px;
             color: #333;
+            font-size: 12px;
         }
     }
     width: 100%;
 }
+
