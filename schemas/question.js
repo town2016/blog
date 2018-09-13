@@ -5,7 +5,9 @@ let questionSchema = new Schema({
   question: String,
   answer: String,
   category: String,
-  description: String
+  description: String,
+  createTime: Date,
+  updateTime: Date
 })
 
 module.exports = questionSchema

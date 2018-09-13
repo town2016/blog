@@ -111,6 +111,11 @@
       total += Number(item.name)
     })
     list.forEach(item => {
+      if (total === 0) {
+        item.style.width = 100 + '%'
+        item.querySelector('.number').innerText = 100 + '%'
+        return
+      }
       var rate = Math.floor(Number(item.name) / total * 100)
       item.style.width = rate + '%'
       item.querySelector('.number').innerText = rate + '%'

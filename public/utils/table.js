@@ -1,5 +1,5 @@
 // 创建表格对象
-function Table (model, data, el) {
+function Table (model, el, data) {
   return {
     id: 't_' + new Date().getTime(),
     tableModel: model || [],

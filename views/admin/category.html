@@ -1,7 +1,9 @@
 {% extends './layout.html' %}
 {% block head %}
+<script src="/public/js/moment.js"></script>
 <script src="/public/utils/validate.js"></script>
 <script src="/public/js/admin/category.js"></script>
+<script src="/public/utils/form.js"></script>
 {% endblock %}
 {% block content %}
 <div class="sub-title">
@@ -14,37 +16,22 @@
   <div class="list">
     <div class="itable"></div>
   </div>
-  <div style="width: 70%;">
-    <form id="category-form" class="form">
-      <div class="form-group">
-        <lable class="form-label">类别名称</lable>
-        <div class="form-control">
-          <input type="text" id="categoryName"  placeholder="请输入类别名称" name='categoryName' data-required/>
-        </div>
-      </div>
-      <div class="form-group">
-        <lable class="form-label">类别编码</lable>
-        <div class="form-control">
-          <input type="text" placeholder="请输入类别编码" name='categoryCode' data-required/>
-        </div>
-      </div>
-      <div class="form-btns">
-        <span class="btn-primary btn" onclick="save()">保存</span>
-        <span class="btn-default btn" onclick="resetForm()" id="reset">重置</span>
-      </div>
-    </form>
-  </div>
+  
+  <div style="width: 70%;" class="iform"></div>
 </div>
 <script>
-  const cateForm = document.getElementById("category-form")
+  var iform = new Iform( document.querySelector('.iform'), formModel, btns)
+  const cateForm = document.getElementById(iform.id)
   // 创建分类表格
   let  table
   createCategoryTable()
   function createCategoryTable () {
     let el = document.querySelector('.list').querySelector('.itable')
-    table = new Table(tableModel, [], el)
+    table = new Table(tableModel, el)
     table.create()
   }
+  // 初始化表单验证对象
+  var validator = new Validater(cateForm)
   // 拉取分类列表
   getCategorys()
   function getCategorys () {
@@ -53,18 +40,14 @@
     })
   }
   // 保存分类信息
-  function save () {
+  function save (event) {
     if (!validator.check()) return
-    var elems = cateForm,elements
-    var params = {}
-    for (var i = 0; i < elems.length; i++) {
-      var item = elems[i]
-      params[item.name] = item.value
-    }
+    var params = iform.datas
     saveCategory(params).then(res => {
       if (res.data.code === 200) {
         getCategorys()
-        document.querySelector("#reset").click()
+        eventHandler.getTarget(event).nextSibling.click()
+        iform.form.formData = {}
       }
     })
   }
@@ -77,6 +60,12 @@
       }
     })
   }
-  var validator = new Validater(cateForm)
+  // 拉取分类详情
+  function getDetail (params) {
+    detailCategory({id: params._id}).then(res => {
+      var formData = res.data.data
+      iform.form.formData = formData
+    })
+  }
 </script>
 {% endblock %}

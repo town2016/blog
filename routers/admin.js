@@ -11,15 +11,18 @@ router.use(function (req, res, next) {
   next()
 })
 
+// 渲染后台管理系统首页
 router.get('/', function (req, res, next) {
-  res.render('admin/index', {})
+  res.render('admin/index')
 })
-
+// 渲染分类页
 router.get('/category', function (req, res, next) {
-  res.render('admin/category', {})
+  res.render('admin/category')
 })
-module.exports = router
-
+// 渲染问答页
+router.get('/question', function (req, res, next) {
+  res.render('admin/question')
+})
 // 类别列表查询
 router.get('/categorys', function (req, res, next) {
   Category.find().then(categorys => {
@@ -31,8 +34,8 @@ router.get('/categorys', function (req, res, next) {
 // 类别保存
 router.post('/saveCategory', function (req, res, next) {
   let category = req.body
-  if (category.id) {
-    Category.findById(category.id, function (err, cate) {
+  if (category._id) {
+    Category.findById(category._id, function (err, cate) {
       if (err) {
         console.log(err)
       } else {
@@ -79,7 +82,7 @@ router.post('/saveCategory', function (req, res, next) {
     })
   }
 })
-// 删除
+// 删除分类
 router.get('/deleteCategory', function (req, res, next) {
   let id = req.query.id
   Category.remove({_id: id}, function (err) {
@@ -92,3 +95,19 @@ router.get('/deleteCategory', function (req, res, next) {
     res.json(response)
   })
 })
+// 拉取详情
+router.get('/detailCategory', function (req, res, next) {
+  let id = req.query.id
+  Category.findById(id, function (err, cate) {
+    if (err) {
+      response.code = 500
+      response.data = err
+    } else {
+      response.data = cate
+    }
+    res.json(response)
+  })
+})
+
+// 暴露路由
+module.exports = router

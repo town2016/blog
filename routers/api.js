@@ -15,7 +15,10 @@ router.use(function (req, res, next) {
 
 // 提交问题
 router.post('/question', function (req, res, next) {
-  let question = new Question(req.body)
+  let params = req.body
+  params.createTime = params.updateTime = new Date()
+  params.answer = ''
+  let question = new Question(params)
   question.save().then( function (user) {
     response.message = '操作成功'
     res.json(response)
@@ -27,9 +30,11 @@ router.post('/question', function (req, res, next) {
  skip 从第几条开始查询
  * */
 router.get('/question', function(req, res, next) {
-  Question.find().limit(5).skip(0).then(function (list) {
-    if (err) {
-      response.message = err
+  var limit = Number(req.query.pageSize || 10), skip = Number(req.query.pageNum || 1)
+  console.log(limit, skip)
+  Question.find().limit(limit).skip(limit * (skip - 1)).then(function (list) {
+    if (list) {
+      response.data = list
       res.json(response)
     } else {
       response.data = list

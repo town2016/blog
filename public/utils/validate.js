@@ -20,7 +20,6 @@ function getValidators() {
     }
   }
 }
-
 function Validater(form) {
   this.id = form.id
   this.elements = form.elements
@@ -66,7 +65,6 @@ function bindEventListener(el, valis) {
     }
   })
 }
-
 function tip (el, operation, message) {
   var parent = el.parentNode
   parent.style.position = 'relative'
@@ -87,10 +85,8 @@ function tip (el, operation, message) {
     }
   }
 }
-
 // 初始化表单验证实例的验证规则集
 Validater.rules = getValidators()
-
 // 获取所有表单控件的所有的自定义属性
 function dataset(element) {
   var obj = {};

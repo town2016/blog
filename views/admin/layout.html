@@ -2,14 +2,14 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>后台管理系统</title>
+		<title>博客后台管理系统__town</title>
 		<script src="/public/js/axios.min.js" ></script>
 		<script src="/public/utils/$http.js" ></script>
 		<script src="/public/utils/common.js"></script>
 		<link rel="stylesheet/less" type="text/css" href="/public/css/reset.less" />
 		<link rel="stylesheet/less" type="text/css" href="/public/css/admin.less"/>
 		{% block head %}{% endblock %}
-		<script src="/public/js/table.js"></script>
+		<script src="/public/utils/table.js"></script>
 		<script src="/public/js/less.min.js"></script>
 	</head>
 	<body>
@@ -23,6 +23,9 @@
 	          <li>
 	            <a href="/admin/category">分类</a>
 	          </li>
+	          <li>
+              <a href="/admin/question">问答</a>
+            </li>
 	        </ul>
 	      </div>
 	      <div class="content">
