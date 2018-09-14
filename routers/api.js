@@ -47,6 +47,18 @@ router.post('/editQuestion', function (req, res, next) {
     }
   })
 })
+// 拉取问答详情
+router.get('/detailQuestion', function (req, res, next) {
+  Question.findById(req.query.id, function (err, question) {
+    if (err) {
+      response.code = 500
+      response.data = err
+    } else {
+      response.data = question
+    }
+    res.json(response)
+  })
+})
 /*
  拉取问题列表
  limit 每页返回天数
@@ -54,7 +66,6 @@ router.post('/editQuestion', function (req, res, next) {
  * */
 router.get('/question', function(req, res, next) {
   var limit = Number(req.query.pageSize || 10), skip = Number(req.query.pageNum || 1)
-  console.log(limit, skip)
   Question.find().limit(limit).skip(limit * (skip - 1)).then(function (list) {
     if (list) {
       response.data = list

@@ -86,12 +86,14 @@
         </ul>
       </div>
       <div class="answer">
+        {% if answer.answer %}
         <ul>
           <li>
             <div class="responseder">答(town)：</div>
-            <div class="response">{{answer.description}}</div>
+            <div class="response">{{answer.answer}}</div>
           </li>
         </ul>
+        {% endif %}
       </div>
     </div>
     {% endfor %}

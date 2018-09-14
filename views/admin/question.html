@@ -23,7 +23,9 @@
     text: '保存',
     classes: ['btn-primary'],
     on: {
-      click() {}
+      click(event) {
+        saveQuestion(event)
+      }
     }
   }, {
     text: '重置',
@@ -35,12 +37,13 @@
     }
   }])
   // 添加表单验证
-  new Validater(document.getElementById(iform.id))
+  var validator = new Validater(document.getElementById(iform.id))
   // 拉取问答列表
-  getQuestion({
+  var pager = {
     pageNum: 1,
-    pageSize: 20
-  })
+    pageSize: 10
+  }
+  getQuestion(pager)
   // 拉取问答列表
   function getQuestion(params) {
     findQuestions(params).then(res => {
@@ -53,6 +56,15 @@
   	  iform.form.formData = res.data.data
   	})
   }
-  function
+  // 提交回答
+  function saveQuestion (event) {
+    if (!validator.check()) return
+    editQuestion(iform.datas).then(res => {
+      if (res.data.code === 200) {
+        getQuestion(pager)
+        eventHandler.getTarget(event).nextSibling.click()
+      }
+    })
+  }
 </script>
 {% endblock %}

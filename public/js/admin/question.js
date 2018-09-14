@@ -40,8 +40,13 @@ const tableModel = [
           h('span', {
             class: {
               'btn-text': true
+            },
+            on: {
+              click: () => {
+                getDetail(row)
+              }
             }
-          }, '编辑')
+          }, '回答')
         ]
       })
     }
@@ -60,9 +65,15 @@ const formModel = [
     }
   }
 ]
+// 列表
 function findQuestions (params) {
   return $http.get('/api/question', params)
 }
+// 详情
 function detailQuestion (params) {
   return $http.get('/api/detailQuestion', params)
+}
+// 编辑
+function editQuestion (params) {
+  return $http.post('/api/editQuestion', params)
 }
