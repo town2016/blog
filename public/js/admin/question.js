@@ -47,6 +47,22 @@ const tableModel = [
     }
   }
 ]
+const formModel = [
+  {
+    tag: 'input',
+    label: '回答',
+    prop: 'answer',
+    attrs: {
+      placeholder: '请输入你的回答'
+    },
+    dataset: {
+      required: true
+    }
+  }
+]
 function findQuestions (params) {
   return $http.get('/api/question', params)
+}
+function detailQuestion (params) {
+  return $http.get('/api/detailQuestion', params)
 }

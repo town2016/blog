@@ -24,6 +24,29 @@ router.post('/question', function (req, res, next) {
     res.json(response)
   })
 })
+// 问答编辑
+router.post('/editQuestion', function (req, res, next) {
+  let params = req.body
+  Question.findById(params._id, function (err, question) {
+    if (err) {
+      console.log(err)
+    } else {
+      question.update({
+        answer: params.answer,
+        updateTime: new Date()
+      }, function (error, row) {
+        if (err) {
+          response.code = 500
+          response.message = '操作失败'
+          console.log(err)
+        } else {
+          response.message = '操作成功'
+        }
+        res.json(response)
+      })
+    }
+  })
+})
 /*
  拉取问题列表
  limit 每页返回天数

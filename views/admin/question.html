@@ -1,11 +1,10 @@
-{% extends './layout.html' %}
-{% block head %}
+{% extends './layout.html' %} {% block head %}
 <script src="/public/js/moment.js"></script>
+<script src="/public/utils/form.js"></script>
 <script src="/public/utils/validate.js"></script>
 <script src="/public/js/admin/question.js"></script>
 
-{% endblock %}
-{% block content %}
+{% endblock %} {% block content %}
 <div class="sub-title">
   问答管理
 </div>
@@ -13,21 +12,47 @@
   <div class="list">
     <div class="itable"></div>
   </div>
+  <div class="iform"></div>
 </div>
 <script>
   // 创建问答表格
   let table = new Table(tableModel, document.querySelector('.itable'))
   table.create()
+  // 创建表单
+  var iform = new Iform(document.querySelector(".iform"), formModel, [{
+    text: '保存',
+    classes: ['btn-primary'],
+    on: {
+      click() {}
+    }
+  }, {
+    text: '重置',
+    classes: ['btn-default'],
+    on: {
+      click() {
+        resetForm()
+      }
+    }
+  }])
+  // 添加表单验证
+  new Validater(document.getElementById(iform.id))
   // 拉取问答列表
   getQuestion({
     pageNum: 1,
     pageSize: 20
   })
- function getQuestion (params) {
-   findQuestions(params).then(res => {
-     table.tableData = res.data.data
-   })
- }
-  
+  // 拉取问答列表
+  function getQuestion(params) {
+    findQuestions(params).then(res => {
+      table.tableData = res.data.data
+    })
+  }
+  // 拉取问答详情
+  function getDetail (row) {
+  	detailQuestion({id: row._id}).then(res => {
+  	  iform.form.formData = res.data.data
+  	})
+  }
+  function
 </script>
 {% endblock %}
