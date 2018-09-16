@@ -174,3 +174,34 @@ form{
         color: red;
     }
 }
+
+.pager{
+    margin: 10px 0;
+    span {
+        display: inline-block;
+        cursor: pointer;
+        padding: 3px 10px;
+        border:1px solid #ddd;
+        font-size: 12px;
+        border-left: 0;
+        &:hover{
+            color: #409EFF;
+        }
+    }
+    span.active{
+        color: #6495ED;
+    }
+    span:first-of-type{
+        border-left:1px solid #ddd;
+    }
+    .pageList{
+        display: inline-block;
+        span{
+            width: 29px;
+            text-align: center;
+            &:first-of-type{
+                border-left: 0;
+            }
+        }
+    }
+}

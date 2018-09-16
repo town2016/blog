@@ -1,5 +1,6 @@
 {% extends './layout.html' %} {% block head %}
 <script src="/public/js/moment.js"></script>
+<script src="/public/utils/pager.js"></script>
 <script src="/public/utils/form.js"></script>
 <script src="/public/utils/validate.js"></script>
 <script src="/public/js/admin/question.js"></script>
@@ -11,6 +12,7 @@
 <div class="content-inner">
   <div class="list">
     <div class="itable"></div>
+    <div class="pager-container"></div>
   </div>
   <div class="iform"></div>
 </div>
@@ -18,6 +20,8 @@
   // 创建问答表格
   let table = new Table(tableModel, document.querySelector('.itable'))
   table.create()
+  // 创建分页
+  new Pager(document.querySelector('.pager-container'), 10)
   // 创建表单
   var iform = new Iform(document.querySelector(".iform"), formModel, [{
     text: '保存',
