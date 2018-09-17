@@ -17,7 +17,7 @@ app.use('/public', express.static(__dirname + '/public'))
 // bodyParser配置
 app.use(bodyParser.urlencoded({ extended: true }))
 // 初始化并连接数据库
-mongoose.connect('mongodb://112.74.39.234 :27017/blog', {useNewUrlParser:true}, function (err, mongo) {
+mongoose.connect('mongodb://localhost:27017/blog', {useNewUrlParser:true}, function (err, mongo) {
   if (err) {
     console.log('数据库连接失败')
   } else {

@@ -1,10 +1,11 @@
 function Pager(mount, total) {
   this.id = 'pager_' + new Date().getTime()
   this.curPage = 1
-  this.pageSize = 3
+  this.pageSize = 5
   this.totalPage = Math.ceil(total / this.pageSize)
   this.init = function() {
     mount.appendChild(this.renderUi())
+    Pager.setCurPage(this.curPage, this)
   }
   this.init()
 }
@@ -22,7 +23,7 @@ Pager.prototype.renderUi = function() {
   pager.appendChild(previous)
   var pageList = document.createElement('div')
   pageList.className = 'pageList'
-  Pager.initPageList(pageList, this)
+  Pager.initPageList(pageList, 0, this.totalPage, this)
   pager.appendChild(pageList)
   var next = document.createElement('span')
   next.className = 'next'
@@ -34,18 +35,27 @@ Pager.prototype.renderUi = function() {
   pager.appendChild(last)
   return pager
 }
-Pager.initPageList = function (pageList, that) {
- var i = 0
-  while (i < that.totalPage) {
+Pager.initPageList = function (pageList, start, end, that) {
+  var i = start
+  let len = Math.min(5, (end - start))
+  while (i < (len + start)) {
     var pageNum = document.createElement('span')
     pageNum.innerText = i * 1 + 1
+    pageNum.index = i - start
     pageNum.className = 'pageNum'
     eventHandler.addEvent(pageNum, 'click', function () {
-      that.curPage = Number(this.innerText)
-      Pager.setCurPage(this.innerText, that)
+      that.curPage = Number(this.innerText);
+      Pager.setCurPage(this.innerText, that);
+      (that.curPage < that.totalPage) && Pager.getMorePageNum(that)
     })
     pageList.appendChild(pageNum)
     i++
+  }
+  if (that.totalPage - (len + start) > 0) {
+    let more = document.createElement('span')
+    more.innerText = '...'
+    more.className = 'moreNum'
+    pageList.appendChild(more)
   }
 }
 
@@ -54,10 +64,21 @@ Pager.setCurPage = function (index, that) {
   let pageList = document.querySelector('#' + that.id).querySelectorAll('.pageNum')
   for (var i = 0; i < pageList.length; i++) {
     var item = pageList[i]
-    if (item.innerText === index) {
+    if (Number(item.innerText) === Number(index)) {
       item.classList.add('active')
     } else {
       item.classList.remove('active')
     }
   }
+}
+
+Pager.getMorePageNum = function (that) {
+  let pageList = document.querySelector('#' + that.id).querySelector(".pageList")
+  pageList.innerHTML = ''
+  let end = Math.min(that.curPage + 3, that.totalPage)
+  end = Math.max(5, end)
+  let start =  Math.max(0, that.curPage - 3)
+  start = Math.min(that.totalPage - 5, start)
+  Pager.initPageList(pageList, start, end, that)
+  Pager.setCurPage(that.curPage, that)
 }
