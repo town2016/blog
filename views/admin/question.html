@@ -21,7 +21,11 @@
   let table = new Table(tableModel, document.querySelector('.itable'))
   table.create()
   // 创建分页
-  new Pager(document.querySelector('.pager-container'), 10)
+  var pager = new Pager(document.querySelector('.pager-container'), function (pageNum, pageSize) {
+    pageNation.pageNum = pageNum
+    pageNation.pageSize = pageSize
+    getQuestion(pageNation)
+  })
   // 创建表单
   var iform = new Iform(document.querySelector(".iform"), formModel, [{
     text: '保存',
@@ -43,15 +47,16 @@
   // 添加表单验证
   var validator = new Validater(document.getElementById(iform.id))
   // 拉取问答列表
-  var pager = {
-    pageNum: 1,
-    pageSize: 10
+  var pageNation = {
+    pageNum: pager.curPage,
+    pageSize: pager.pageSize
   }
-  getQuestion(pager)
+  getQuestion(pageNation)
   // 拉取问答列表
   function getQuestion(params) {
     findQuestions(params).then(res => {
-      table.tableData = res.data.data
+      table.tableData = res.data.data.list
+      pager.pager.total = res.data.data.total
     })
   }
   // 拉取问答详情

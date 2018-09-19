@@ -66,13 +66,21 @@ router.get('/detailQuestion', function (req, res, next) {
  * */
 router.get('/question', function(req, res, next) {
   var limit = Number(req.query.pageSize || 10), skip = Number(req.query.pageNum || 1)
-  Question.find().limit(limit).skip(limit * (skip - 1)).then(function (list) {
-    if (list) {
-      response.data = list
-      res.json(response)
+  Question.countDocuments({}, function (err, count) {
+    if (err) {
+      console.log(err)
     } else {
-      response.data = list
-      res.json(response)
+      Question.find().limit(limit).skip(limit * (skip - 1)).then(function (list) {
+        if (list) {
+          response.data = {}
+          response.data.total = count
+          response.data.list = list
+          res.json(response)
+        } else {
+          response.data = list
+          res.json(response)
+        }
+      })
     }
   })
 })
