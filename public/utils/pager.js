@@ -97,6 +97,7 @@ Pager.prototype.renderUi = function(pager) {
   pageSize.onchange = function ($event) {
     var target = eventHandler.getTarget($event), value = target.value
     that.pageSize = Number(value)
+    that.curPage = 1
     var options = this.querySelectorAll('option')
     that.change()
   }

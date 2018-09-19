@@ -52,11 +52,21 @@
   }
   // 删除分类信息
   function deletes (params) {
-    deleteCategory({id: params._id}).then(res => {
-      if (res.data.code === 200) {
-        alert(res.data.message)
-        getCategorys()
-      }
+    message.confirm('该操作不可恢复，确定要删除吗？', function () {
+      deleteCategory({id: params._id}).then(res => {
+        if (res.data.code === 200) {
+          message.msg({
+            type: 'success',
+            message: res.data.message
+          })
+          getCategorys()
+        } else {
+          message.msg({
+            type: 'error',
+            message: res.data.message
+          })
+        }
+      })
     })
   }
   // 拉取分类详情
