@@ -1,0 +1,43 @@
+{% extends './layout.html' %} {% block head %}
+<script src="/public/js/moment.js"></script>
+<script src="/public/utils/pager.js"></script>
+<script src="/public/utils/form.js"></script>
+<script src="/public/utils/validate.js"></script>
+<script src="/public/js/admin/records.js"></script>
+
+{% endblock %} {% block content %}
+<div class="sub-title">
+  浏览记录管理
+</div>
+<div class="content-inner">
+  <div class="list">
+    <div class="itable"></div>
+    <div class="pager-container"></div>
+  </div>
+</div>
+<script>
+  // 创建问答表格
+  let table = new Table(tableModel, document.querySelector('.itable'))
+  table.create()
+  // 创建分页
+  var pager = new Pager(document.querySelector('.pager-container'), function (pageNum, pageSize) {
+    pageNation.pageNum = pageNum
+    pageNation.pageSize = pageSize
+    findRecordList(pageNation)
+  })
+  // 拉取问答列表
+  var pageNation = {
+    pageNum: pager.curPage,
+    pageSize: pager.pageSize
+  }
+  findRecordList(pageNation)
+  // 拉取问答列表
+  function findRecordList(params) {
+    findRecords(params).then(res => {
+      table.tableData = res.data.data.list
+      pager.pager.total = res.data.data.total
+    })
+  }
+  
+</script>
+{% endblock %}

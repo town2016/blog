@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Category = require('../models/Category')
+const Record = require('../models/ClientIP')
 // 定义统一返回数据格式
 let response
 router.use(function (req, res, next) {
@@ -23,6 +24,11 @@ router.get('/category', function (req, res, next) {
 router.get('/question', function (req, res, next) {
   res.render('admin/question')
 })
+// 渲染浏览记录页
+router.get('/browseRecords', function (req, res, next) {
+  res.render('admin/browseRecords')
+})
+
 // 类别列表查询
 router.get('/categorys', function (req, res, next) {
   Category.find().then(categorys => {
@@ -95,7 +101,7 @@ router.get('/deleteCategory', function (req, res, next) {
     res.json(response)
   })
 })
-// 拉取详情
+// 拉取分类详情
 router.get('/detailCategory', function (req, res, next) {
   let id = req.query.id
   Category.findById(id, function (err, cate) {
@@ -108,6 +114,24 @@ router.get('/detailCategory', function (req, res, next) {
     res.json(response)
   })
 })
-
+// 查询所有浏览记录
+router.get('/browseRecordList', function (req, res, next) {
+  Record.countDocuments({}, function (err, count) {
+    if (!err) {
+      var limit = Number(req.query.pageSize), skip = (req.query.pageNum - 1) * limit;
+      Record.find().limit(limit).skip(skip).then(function (doc) {
+        response.data = {}
+        response.data.total = count
+        response.data.list = doc
+        res.json(response)
+      })
+    } else {
+      response.code = 500
+      response.data = err
+      res.json(response)
+    }
+  })
+  
+})
 // 暴露路由
 module.exports = router

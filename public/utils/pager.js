@@ -3,9 +3,10 @@ function Pager(mount, fn) {
   this.id = 'pager_' + new Date().getTime()
   this.curPage = 1
   this.pageSize = 5
+  this.pages = [5, 10, 20, 30]
   this.events = {}
   this.pager = {
-    totalNum: 0,
+    tha: 0,
     set total(num) {
       this.totalNum = num
       that.totalPage = Math.ceil(this.totalNum / that.pageSize)
@@ -76,6 +77,30 @@ Pager.prototype.remove = function (type, fn) {
 // 初始化UI
 Pager.prototype.renderUi = function(pager) {
   let that = this
+  // 总条数
+  var total = document.createElement('div')
+  total.style.cssText = 'display:inline-block;vertical-align: middle; margin-right: 10px;'
+  total.innerText = '共 ' + that.pager.totalNum + ' 条'
+  pager.appendChild(total)
+  // pageSize
+  var pageSize = document.createElement('select')
+  pageSize.style.cssText = 'display: inline-block;width: 50px; margin-right: 10px; border-radius: 2px;'
+  var pageSizeOpt = ''
+  that.pages.forEach(item => {
+    if (item === that.pageSize) {
+      pageSizeOpt += '<option value="' + item + '" selected>' + item + '</option>'
+    } else {
+      pageSizeOpt += '<option value="' + item + '">' + item + '</option>'
+    }
+  })
+  pageSize.innerHTML = pageSizeOpt
+  pageSize.onchange = function ($event) {
+    var target = eventHandler.getTarget($event), value = target.value
+    that.pageSize = Number(value)
+    var options = this.querySelectorAll('option')
+    that.change()
+  }
+  pager.appendChild(pageSize)
   //首页
   var first = document.createElement('span')
   first.className = 'first'
