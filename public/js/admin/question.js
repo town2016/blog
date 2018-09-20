@@ -35,6 +35,26 @@ const tableModel = [
           h('span', {
             class: {
               'btn-text': true
+            },
+            on: {
+              click: () => {
+                message.confirm('该操作无法回复，是否继续？', function () {
+                  deleteQuestion({id: row._id}).then(function (res) {
+                    if (res.data.code === 200) {
+                      message.msg({
+                        message: res.data.message,
+                        type: 'success'
+                      })
+                      getQuestion(pageNation)
+                    } else {
+                      message.msg({
+                        message: res.data.message,
+                        type: 'error'
+                      })
+                    }
+                  })
+                })
+              }
             }
           }, '删除'),
           h('span', {
@@ -55,6 +75,17 @@ const tableModel = [
 const formModel = [
   {
     tag: 'input',
+    label: '问题',
+    prop: 'question',
+    attrs: {
+      placeholder: '请输入你的问题',
+      disabled: true
+    },
+    dataset: {
+      required: true
+    }
+  }, {
+    tag: 'textarea',
     label: '回答',
     prop: 'answer',
     attrs: {
@@ -76,4 +107,9 @@ function detailQuestion (params) {
 // 编辑
 function editQuestion (params) {
   return $http.post('/api/editQuestion', params)
+}
+// 删除
+function deleteQuestion (params) {
+  console.log(params)
+  return $http.get('/api/deleteQuestion', params)
 }

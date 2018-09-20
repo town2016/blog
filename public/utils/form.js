@@ -7,7 +7,6 @@ function Iform (mount, formModel, btns) {
   this.form = {
     set formData (formData) {
       that.datas = formData
-      console.log(that.datas)
       that.setValue()
     },
     get formData () {

@@ -1,6 +1,7 @@
 {% extends './layout.html' %} {% block head %}
 <script src="/public/js/moment.js"></script>
 <script src="/public/utils/pager.js"></script>
+<script src="/public/utils/dialog.js"></script>
 <script src="/public/utils/form.js"></script>
 <script src="/public/utils/validate.js"></script>
 <script src="/public/js/admin/question.js"></script>
@@ -14,11 +15,12 @@
     <div class="itable"></div>
     <div class="pager-container"></div>
   </div>
-  <div class="iform"></div>
+  <div class="iform" id="questionForm" style="display: none;"></div>
 </div>
 <script>
+  var module
   // 创建问答表格
-  let table = new Table(tableModel, document.querySelector('.itable'))
+  var table = new Table(tableModel, document.querySelector('.itable'))
   table.create()
   // 创建分页
   var pager = new Pager(document.querySelector('.pager-container'), function (pageNum, pageSize) {
@@ -63,6 +65,14 @@
   function getDetail (row) {
   	detailQuestion({id: row._id}).then(res => {
   	  iform.form.formData = res.data.data
+  	  module = dialog({
+  	    title: '问答编辑',
+  	    maskClose: true,
+  	    content: document.getElementById('questionForm'),
+  	    close: function () {
+  	      document.getElementById(iform.id).reset()
+  	    }
+  	  })
   	})
   }
   // 提交回答
@@ -70,8 +80,9 @@
     if (!validator.check()) return
     editQuestion(iform.datas).then(res => {
       if (res.data.code === 200) {
-        getQuestion(pager)
+        getQuestion(pageNation)
         eventHandler.getTarget(event).nextSibling.click()
+        module.close()
       }
     })
   }

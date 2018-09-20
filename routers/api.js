@@ -84,7 +84,22 @@ router.get('/question', function(req, res, next) {
     }
   })
 })
-
+/*
+ *删除问答
+ * */
+router.get('/deleteQuestion', function (req, res, next) {
+  console.log(req.query.id)
+  Question.remove({_id: req.query.id}, function (err) {
+    if (err) {
+      response.code = 500
+      response.data = err
+      response.message = '操作失败'
+    } else {
+      response.message = '操作成功'
+    }
+    res.json(response)
+  })
+})
 const  query = {
 "req_0":{
 "module":"vkey.GetVkeyServer",

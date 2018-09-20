@@ -13,7 +13,7 @@ Message.prototype.msg = function (options) {
     return
   }
   var box = document.createElement('div');
-  box.style.cssText = 'max-width:400px;background-color: #fff;border-radius: 4px;font-size: 14px; padding: 6px 20px;overflow: hidden;position: absolute;z-index: 1001;top: 30%;margin-top:-100px;left:50%;box-shadow: 0 0 5px rgba(0,0,0,0.5);visibility: hidden;'
+  box.style.cssText = 'max-width:400px;background-color: #fff;border-radius: 4px;font-size: 14px; padding: 6px 20px;overflow: hidden;position: absolute;z-index: 1001;top: 10%;margin-top:-100px;left:50%;box-shadow: 0 0 5px rgba(0,0,0,0.5);visibility: hidden;'
   switch (this._default.type) {
     case 'success':
       box.innerHTML = '<span class="icon-success" style="margin-right:10px"></span>' + this._default.message;

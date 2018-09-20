@@ -26,13 +26,17 @@
 
 .icon-error:before {
   content: "\e900";
+  color: #e13d13;
 }
 .icon-question:before {
   content: "\e901";
+  color: #2baee9;
 }
 .icon-success:before {
   content: "\e902";
+  color: #19be6b;
 }
 .icon-warn:before {
   content: "\e903";
+  color: #f29100;
 }

@@ -1,5 +1,6 @@
 {% extends './layout.html' %}
 {% block head %}
+<script src="/public/utils/dialog.js"></script>
 <script src="/public/js/moment.js"></script>
 <script src="/public/utils/validate.js"></script>
 <script src="/public/js/admin/category.js"></script>
@@ -11,13 +12,12 @@
 </div>
 <div class="content-inner">
   <div class="btn-group">
-    <span class="btn btn-success">新增</span>
+    <span class="btn btn-success" onclick="add()">新增</span>
   </div>
   <div class="list">
     <div class="itable"></div>
   </div>
-  
-  <div style="width: 70%;" class="iform"></div>
+  <div  class="iform" id="categoryForm" style="display: none;"></div>
 </div>
 <script>
   var iform = new Iform( document.querySelector('.iform'), formModel, btns)
@@ -74,6 +74,17 @@
     detailCategory({id: params._id}).then(res => {
       var formData = res.data.data
       iform.form.formData = formData
+    })
+  }
+  // 打开新增框
+  function add () {
+    dialog({
+      title: '新增分类',
+      maskClose: true,
+      content: document.querySelector("#categoryForm"),
+      close: function () {
+        document.getElementById(iform.id).reset()
+      }
     })
   }
 </script>
