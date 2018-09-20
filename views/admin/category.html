@@ -20,6 +20,7 @@
   <div  class="iform" id="categoryForm" style="display: none;"></div>
 </div>
 <script>
+  var module
   var iform = new Iform( document.querySelector('.iform'), formModel, btns)
   const cateForm = document.getElementById(iform.id)
   // 创建分类表格
@@ -47,6 +48,7 @@
       if (res.data.code === 200) {
         getCategorys()
         eventHandler.getTarget(event).nextSibling.click()
+        module.close()
       }
     })
   }
@@ -71,14 +73,22 @@
   }
   // 拉取分类详情
   function getDetail (params) {
-    detailCategory({id: params._id}).then(res => {
+    detailCategory([params._id]).then(res => {
       var formData = res.data.data
       iform.form.formData = formData
+      module = dialog({
+        title: '分类编辑',
+        maskClose: true,
+        content: document.querySelector("#categoryForm"),
+        close: function () {
+          document.getElementById(iform.id).reset()
+        }
+      })
     })
   }
   // 打开新增框
   function add () {
-    dialog({
+    module = dialog({
       title: '新增分类',
       maskClose: true,
       content: document.querySelector("#categoryForm"),

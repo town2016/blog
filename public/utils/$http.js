@@ -8,7 +8,18 @@ var instance = axios.create({
 
 window.$http = {
   get: function (url, params) {
-    return instance.get(url, {params: params})
+    var _url
+    if (params) {
+      if (params.length) {
+        _url = url + params[0]
+      } else {
+        _url = Qs(params).length > 0 ? url + '?' + Qs(params) : url
+      }
+    } else {
+      _url = url
+    }
+    
+    return instance.get(_url)
   },
   post: function (url, params) {
     return instance.post(url, params)

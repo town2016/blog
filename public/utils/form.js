@@ -48,6 +48,9 @@ Iform.createFormItem  = function (item, that) {
   switch (item.tag) {
     case 'select':
     break;
+    case 'textarea':
+    formControl.appendChild(form.createTextarea(item.attrs, item.dataset, that))
+    break
     default:
     formControl.appendChild(form.createInput(item.attrs, item.dataset, that))
   }
@@ -92,6 +95,21 @@ const form = {
       }
     })
     return Input
+  },
+   // 创建textarea组件
+  createTextarea: function (attrs, dataset, that) {
+    var Textarea = document.createElement('textarea')
+    attrs && form.createAttributes(Textarea, attrs, 'attrs')
+    dataset && form.createAttributes(Textarea, dataset, 'dataset')
+    eventHandler.addEvent(Textarea, 'change', function () {
+      var elements = document.getElementById(that.id).elements, i = 0
+      while (i < elements.length) {
+        var el = elements[i]
+        that.form.formData[el.name] = el.value
+        i++
+      }
+    })
+    return Textarea
   },
   // 元素绑定属性
   createAttributes: function (el, attrs, sign) {

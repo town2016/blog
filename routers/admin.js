@@ -102,8 +102,8 @@ router.get('/deleteCategory', function (req, res, next) {
   })
 })
 // 拉取分类详情
-router.get('/detailCategory', function (req, res, next) {
-  let id = req.query.id
+router.get('/detailCategory/:id', function (req, res, next) {
+  let id = req.params.id
   Category.findById(id, function (err, cate) {
     if (err) {
       response.code = 500
@@ -131,7 +131,11 @@ router.get('/browseRecordList', function (req, res, next) {
       res.json(response)
     }
   })
-  
 })
-// 暴露路由
+
+// 文章管理
+router.get('/artical', function (req, res, next) {
+  res.render('admin/artical')
+})
+
 module.exports = router

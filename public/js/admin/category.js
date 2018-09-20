@@ -109,5 +109,5 @@ function deleteCategory(params) {
 }
 // 拉取分类详情
 function detailCategory (params) {
-  return $http.get('/admin/detailCategory', params)
+  return $http.get('/admin/detailCategory/', params)
 }
