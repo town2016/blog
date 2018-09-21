@@ -137,5 +137,9 @@ router.get('/browseRecordList', function (req, res, next) {
 router.get('/artical', function (req, res, next) {
   res.render('admin/artical')
 })
+router.get('/articalAdd', function (req, res, next) {
+  res.render('admin/articalAdd')
+})
+
 
 module.exports = router

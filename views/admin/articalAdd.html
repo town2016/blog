@@ -8,20 +8,14 @@
 
 {% endblock %} {% block content %}
 <div class="sub-title">
-  文章管理
+  编辑文章
 </div>
 <div class="content-inner">
-  <div class="list">
-    <div class="btns">
-      <span class="btn btn-success">新增</span>
-    </div>
-    <div class="itable"></div>
-    <div class="pager-container"></div>
-  </div>
+  <div class="iform" id="articalForm"></div>
 </div>
 <script>
-// 创建表格
-var itable = new Table(tableModel, document.querySelector('.itable'))
-itable.create()
+// 创建表单
+var iform = new Iform(document.getElementById("articalForm"), formModel)
+//
 </script>
 {% endblock %}

@@ -44,15 +44,18 @@ Iform.createFormItem  = function (item, that) {
   // 创建表单组件
   formGroup.appendChild(formControl)
   // 给表单组件添加name和id属性
+  item.attrs || (item.attrs = {})
+  item.dataset || (item.dataset = {})
   item.attrs.name = item.attrs.id = item.prop
   switch (item.tag) {
     case 'select':
+    formControl.appendChild(form.createSelect(item, that))
     break;
     case 'textarea':
-    formControl.appendChild(form.createTextarea(item.attrs, item.dataset, that))
+    formControl.appendChild(form.createTextarea(item, that))
     break
     default:
-    formControl.appendChild(form.createInput(item.attrs, item.dataset, that))
+    formControl.appendChild(form.createInput(item, that))
   }
   return formGroup
 }
@@ -82,7 +85,8 @@ Iform.createBtns = function (btns) {
 // 创建表单组件
 const form = {
   // 创建input组件
-  createInput: function (attrs, dataset, that) {
+  createInput: function (_input, that) {
+    var attrs = _input.attrs, dataset = _input.dataset;
     var Input = document.createElement('input')
     attrs && form.createAttributes(Input, attrs, 'attrs')
     dataset && form.createAttributes(Input, dataset, 'dataset')
@@ -97,7 +101,8 @@ const form = {
     return Input
   },
    // 创建textarea组件
-  createTextarea: function (attrs, dataset, that) {
+  createTextarea: function (_textarea, that) {
+    var attrs = _textarea.attrs, dataset = _textarea.dataset;
     var Textarea = document.createElement('textarea')
     attrs && form.createAttributes(Textarea, attrs, 'attrs')
     dataset && form.createAttributes(Textarea, dataset, 'dataset')
@@ -110,6 +115,37 @@ const form = {
       }
     })
     return Textarea
+  },
+  // 创建下拉框
+  createSelect: function (_select, that) {
+    var attrs = _select.attrs, dataset = _select.dataset, options = _select.options || [], optionsHtml = ''
+    var Select = document.createElement('select')
+    attrs && form.createAttributes(Select, attrs, 'attrs')
+    dataset && form.createAttributes(Select, dataset, 'dataset')
+    eventHandler.addEvent(Select, 'change', function () {
+      var elements = document.getElementById(that.id).elements, i = 0
+      while (i < elements.length) {
+        var el = elements[i]
+        that.form.formData[el.name] = el.value
+        i++
+      }
+    })
+    try{
+      if (options.length > 0) {
+        options.forEach(function (item) {
+          optionsHtml += '<option value="' + item[_select.colValue] + '">' + item[_select.col] + '</option>'
+        })
+      } else {
+        optionsHtml = '<option disabled>暂无数据</option>'
+      }
+    }catch(e){
+    	console.log(e)
+    }
+    eventHandler.addEvent(Select, 'focus', function () {
+      _select.focus && _select.focus(Select)
+    })
+    Select.innerHTML = optionsHtml
+    return Select
   },
   // 元素绑定属性
   createAttributes: function (el, attrs, sign) {
