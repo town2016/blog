@@ -13,7 +13,7 @@
 <div class="content-inner">
   <div class="list">
     <div class="btns">
-      <span class="btn btn-success">新增</span>
+      <span class="btn btn-success" onclick="goAddPage()">新增</span>
     </div>
     <div class="itable"></div>
     <div class="pager-container"></div>
@@ -23,5 +23,9 @@
 // 创建表格
 var itable = new Table(tableModel, document.querySelector('.itable'))
 itable.create()
+// 新增
+function goAddPage () {
+  window.location.href = '/admin/articalAdd'
+}
 </script>
 {% endblock %}

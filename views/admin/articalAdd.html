@@ -5,17 +5,50 @@
 <script src="/public/utils/form.js"></script>
 <script src="/public/utils/validate.js"></script>
 <script src="/public/js/admin/artical.js"></script>
-
+<script src="/public/js/wangEditor.js"></script>
+<style type="text/css">
+	.w-e-text-container{
+	  height: 100% !important;
+	}
+</style>
 {% endblock %} {% block content %}
 <div class="sub-title">
   编辑文章
 </div>
 <div class="content-inner">
   <div class="iform" id="articalForm"></div>
+  <div class="iform" style="padding: 0 10px;">
+    <div class="form-group">
+      <label class="form-label">内容</label>
+      <div class="form-control" id="contentEditor" style="border: none; height: 800px;"></div>
+    </div>
+  </div>
+  <form enctype="multipart/form-data" action="/upload" method="post" id="data">
+    <input type="file" name="logo" onchange="uploadFile(this)">
+    <button>提交</button>
+  </form>
+  
 </div>
 <script>
-// 创建表单
-var iform = new Iform(document.getElementById("articalForm"), formModel)
-//
+// 拉取分类列表
+getCategorys().then(function (res) {
+  // 创建表单
+  formModel[2].options = res.data.data
+  var iform = new Iform(document.getElementById("articalForm"), formModel)
+})
+// 编辑器
+var wEditor = window.wangEditor
+var editor = new wEditor('#contentEditor')
+editor.customConfig.customUploadImg = function (files, insert) {
+  var formData = new FormData()
+  formData.append('file', files[0])
+  $http.post('/admin/fileUpload', formData).then(res => {
+    insert(res.data.data)
+  })
+}
+
+
+editor.create()
+
 </script>
 {% endblock %}

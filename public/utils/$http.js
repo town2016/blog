@@ -1,8 +1,5 @@
 
 var instance = axios.create({
-  transformRequest: [function (data) {  
-      return Qs(data)
-    }],
     withCredentials:true,
 });
 

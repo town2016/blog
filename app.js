@@ -16,6 +16,7 @@ swig.setDefaults({cache: false})
 app.use('/public', express.static(__dirname + '/public'))
 // bodyParser配置
 app.use(bodyParser.urlencoded({ extended: true }))
+
 // 初始化并连接数据库
 mongoose.connect('mongodb://localhost:27017/blog', {useNewUrlParser:true}, function (err, mongo) {
   if (err) {

@@ -2,6 +2,10 @@ const express = require('express')
 const router = express.Router()
 const Category = require('../models/Category')
 const Record = require('../models/ClientIP')
+var app = express()
+var fs = require('fs')
+var multer = require('multer')
+var upload = multer({dest:'./uploads'})
 // 定义统一返回数据格式
 let response
 router.use(function (req, res, next) {
@@ -137,8 +141,28 @@ router.get('/browseRecordList', function (req, res, next) {
 router.get('/artical', function (req, res, next) {
   res.render('admin/artical')
 })
+// 文章编辑页面
 router.get('/articalAdd', function (req, res, next) {
   res.render('admin/articalAdd')
+}) 
+// 文章图片上传
+router.post('/fileUpload',  upload.single("file"), function (req, res, next) {
+    // var files =  req.files.thumbnail
+     var tmp_path = req.file.path;
+    // 指定文件上传后的目录 - 示例为"images"目录。 
+    var target_path = './uploads' + req.file.originalname;
+    // 移动文件
+    fs.rename(tmp_path, target_path, function(err) {
+      if (err) throw err;
+      // 删除临时文件夹文件, 
+      fs.unlink(tmp_path, function() {
+         if (err) throw err;
+         response.data = target_path
+         res.json(response)
+      });
+    });
+   //  
+
 })
 
 
