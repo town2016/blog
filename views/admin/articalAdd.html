@@ -8,7 +8,7 @@
 <script src="/public/js/wangEditor.js"></script>
 <style type="text/css">
 	.w-e-text-container{
-	  height: 100% !important;
+	  height: 467px !important;
 	}
 </style>
 {% endblock %} {% block content %}
@@ -20,21 +20,22 @@
   <div class="iform" style="padding: 0 10px;">
     <div class="form-group">
       <label class="form-label">内容</label>
-      <div class="form-control" id="contentEditor" style="border: none; height: 800px;"></div>
+      <div class="form-control" id="contentEditor" style="border: none; height: 500px;"></div>
     </div>
   </div>
-  <form enctype="multipart/form-data" action="/upload" method="post" id="data">
-    <input type="file" name="logo" onchange="uploadFile(this)">
-    <button>提交</button>
-  </form>
-  
+  <div class="form-btns" style="padding-left: 140px;">
+    <span class="btn btn-success" onclick="save()">保存</span>
+  </div>
 </div>
 <script>
 // 拉取分类列表
+var iform,validator;
 getCategorys().then(function (res) {
   // 创建表单
   formModel[2].options = res.data.data
-  var iform = new Iform(document.getElementById("articalForm"), formModel)
+  iform = new Iform(document.getElementById("articalForm"), formModel)
+  // 表单验证
+  validator = new Validater(document.getElementById(iform.id))
 })
 // 编辑器
 var wEditor = window.wangEditor
@@ -46,9 +47,28 @@ editor.customConfig.customUploadImg = function (files, insert) {
     insert(res.data.data)
   })
 }
-
-
 editor.create()
-
+// 保存
+function save () {
+  var valid = validator.check()
+  if (!valid) return
+  var params = iform.datas
+  params.content = editor.txt.html()
+  console.log(params)
+  saveArtical(params).then(function (res) {
+    if (res.data.code === 200) {
+      message.msg({
+        type: 'success',
+        message: res.data.message
+      })
+      // window.location.href = '/admin/artical'
+    } else {
+      message.msg({
+        type: 'error',
+        message: res.data.message
+      })
+    }
+  })
+}
 </script>
 {% endblock %}

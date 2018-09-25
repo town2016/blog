@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Category = require('../models/Category')
 const Record = require('../models/ClientIP')
+const Artical = require('../models/Artical')
 var app = express()
 var fs = require('fs')
 var multer = require('multer')
@@ -144,25 +145,95 @@ router.get('/artical', function (req, res, next) {
 // 文章编辑页面
 router.get('/articalAdd', function (req, res, next) {
   res.render('admin/articalAdd')
-}) 
+})
+// 拉取文章列表
+router.get('/articals', function (req, res, next) {
+  var limit = Number(req.query.pageSize || 5), skip = Number(req.query.pageNum || 1)
+  Artical.countDocuments({}, function (err, count) {
+    if (err) {
+      console.log(err)
+    } else {
+      Artical.find().limit(limit).skip((skip - 1) * limit).then(articals => {
+        response.data = {}
+        response.data.total = count
+        response.data.list = articals
+        res.json(response)
+      })  
+    }
+  })
+})
+// 文章编辑保存
+router.post('/saveArtical', function (req, res, next) {
+  var params = req.body
+  if (params._id) {
+    Artical.findById(params._id, function (err, artical) {
+      if (err) {
+        console.log(err)
+      } else {
+        var data = artical
+        delete data._id
+        data.updateTime = new Date()
+        artical.update(data, function (err, row) {
+          if (err) {
+            response.code = 500
+            response.data = err
+            response.message = '操作失败'
+          } else {
+            response.message = '操作成功'
+          }
+          res.json(response)
+        })
+      }
+    })
+  } else {
+    params.createTime = params.updateTime = new Date()
+    params.auther = 'town'
+    var artical = new Artical(params)
+    artical.save(function (err, arti) {
+      if (err) {
+        response.code = 500
+        response.message = '操作失败'
+        response.data = err
+      } else {
+        response.message = '操作成功'
+      }
+      res.json(response)
+    })
+  }
+})
+// 文章删除
+router.get('/deleteArtical', function (req, res, next) {
+  let $ids = req.query.id.split(',')
+  Artical.remove({_id: { $in: $ids}}, function (err) {
+    if (err) {
+      response.code = 500
+      response.message = '操作失败'
+      response.data = err
+    } else {
+      response.message = '操作成功'
+    }
+    res.json(response)
+  })
+})
+
 // 文章图片上传
 router.post('/fileUpload',  upload.single("file"), function (req, res, next) {
     // var files =  req.files.thumbnail
+    console.log(req.file)
      var tmp_path = req.file.path;
+     
     // 指定文件上传后的目录 - 示例为"images"目录。 
-    var target_path = './uploads' + req.file.originalname;
+    var target_path = './uploads/' + req.file.originalname;
     // 移动文件
     fs.rename(tmp_path, target_path, function(err) {
       if (err) throw err;
       // 删除临时文件夹文件, 
       fs.unlink(tmp_path, function() {
          if (err) throw err;
-         response.data = target_path
+         response.data = '/uploads/' + req.file.originalname
          res.json(response)
       });
     });
-   //  
-
 })
 
 

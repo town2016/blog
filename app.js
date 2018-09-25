@@ -14,8 +14,10 @@ app.set('view engine', 'html')
 swig.setDefaults({cache: false})
 // 配置静态文件路径
 app.use('/public', express.static(__dirname + '/public'))
+app.use('/uploads', express.static(__dirname + '/uploads'))
 // bodyParser配置
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json());
 
 // 初始化并连接数据库
 mongoose.connect('mongodb://localhost:27017/blog', {useNewUrlParser:true}, function (err, mongo) {

@@ -6,7 +6,7 @@ function Pager(mount, fn) {
   this.pages = [5, 10, 20, 30]
   this.events = {}
   this.pager = {
-    tha: 0,
+    totalNum: 0,
     set total(num) {
       this.totalNum = num
       that.totalPage = Math.ceil(this.totalNum / that.pageSize)

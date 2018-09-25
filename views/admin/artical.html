@@ -23,9 +23,28 @@
 // 创建表格
 var itable = new Table(tableModel, document.querySelector('.itable'))
 itable.create()
+// 创建分页
+var pager = new Pager(document.querySelector('.pager-container'), function (pageNum, pageSize) {
+  pageNation.pageNum = pageNum
+  pageNation.pageSize = pageSize
+  // 拉取所有文章
+  getArticalList(pageNation)
+})
+var pageNation = {
+  pageNum: pager.curPage,
+  pageSize: pager.pageSize
+}
+getArticalList(pageNation)
+function getArticalList (pageNation) {
+  articalList(pageNation).then(function (res) {
+    itable.tableData = res.data.data.list
+    pager.pager.total = res.data.data.total
+  })
+}
 // 新增
 function goAddPage () {
   window.location.href = '/admin/articalAdd'
 }
+
 </script>
 {% endblock %}

@@ -15,7 +15,6 @@ window.$http = {
     } else {
       _url = url
     }
-    
     return instance.get(_url)
   },
   post: function (url, params) {
