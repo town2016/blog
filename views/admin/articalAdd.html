@@ -54,7 +54,6 @@ function save () {
   if (!valid) return
   var params = iform.datas
   params.content = editor.txt.html()
-  console.log(params)
   saveArtical(params).then(function (res) {
     if (res.data.code === 200) {
       message.msg({
@@ -68,6 +67,16 @@ function save () {
         message: res.data.message
       })
     }
+  })
+}
+// 拉取详情
+if (window.location.search) {
+  getDetail([window.location.search.split('=')[1]])
+}
+function getDetail (params) {
+  detailArtical(params).then(function (res) {
+    iform.form.formData = res.data.data
+    editor.txt.html(res.data.data.content)
   })
 }
 </script>

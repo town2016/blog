@@ -170,7 +170,7 @@ router.post('/saveArtical', function (req, res, next) {
       if (err) {
         console.log(err)
       } else {
-        var data = artical
+        var data = params
         delete data._id
         data.updateTime = new Date()
         artical.update(data, function (err, row) {
@@ -196,14 +196,33 @@ router.post('/saveArtical', function (req, res, next) {
         response.data = err
       } else {
         response.message = '操作成功'
+        Artical.countDocuments({category: params.category}, function (countErr, count) {
+          if (countErr) {
+            console.log(countErr)
+          } else {
+            Category.findOne({categoryCode: params.category}, function (cateErr, cate) {
+              if (cateErr) {
+                console.log(cateErr)
+              } else {
+                cate.update({count: count, updateTime: new Date()}, function (categoryErr, row) {
+                  if (categoryErr) {
+                    console.log(err)
+                  }
+                })
+              }
+            }) 
+          }
+        })
       }
-      res.json(response)
+      
     })
   }
 })
+
 // 文章删除
 router.get('/deleteArtical', function (req, res, next) {
-  let $ids = req.query.id.split(',')
+  var $ids = req.query.id.split(',')
+  var category = req.query.category
   Artical.remove({_id: { $in: $ids}}, function (err) {
     if (err) {
       response.code = 500
@@ -211,6 +230,36 @@ router.get('/deleteArtical', function (req, res, next) {
       response.data = err
     } else {
       response.message = '操作成功'
+      Artical.countDocuments({category: category}, function (countErr, count) {
+          if (countErr) {
+            console.log(countErr)
+          } else {
+            Category.findOne({categoryCode: category}, function (cateErr, cate) {
+              if (cateErr) {
+                console.log(cateErr)
+              } else {
+                cate.update({count: count, updateTime: new Date()}, function (categoryErr, row) {
+                  if (categoryErr) {
+                    console.log(err)
+                  }
+                })
+              }
+            }) 
+          }
+        })
+    }
+    res.json(response)
+  })
+})
+// 文章详情
+router.get('/detailArtical/:id', function (req, res, next) {
+  Artical.findById({_id: req.params.id}, function (err, row) {
+    if (err) {
+      response.code = 500
+      response.message = '操作失败'
+      response.data = err
+    } else {
+      response.data = row
     }
     res.json(response)
   })

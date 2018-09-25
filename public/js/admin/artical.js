@@ -35,7 +35,9 @@ const tableModel = [{
             'btn-text': true
           },
           on: {
-            click: function () {}
+            click: function () {
+              window.location.href = '/admin/articalAdd?id=' + row._id
+            }
           }
         }, '编辑'),
         h('span', {
@@ -45,7 +47,7 @@ const tableModel = [{
           on: {
             click: function () {
               message.confirm('该操作不可恢复，是否继续？', function () {
-                deleteArtical({id: row._id}).then(function (res) {
+                deleteArtical({id: row._id, category: row.category}).then(function (res) {
                   if (res.data.code === 200) {
                     message.msg({
                       message: res.data.message,
@@ -111,4 +113,8 @@ function saveArtical (params) {
 // 删除文章
 function deleteArtical (params) {
   return $http.get('/admin/deleteArtical', params)
+}
+// 获取文章详情
+function detailArtical (params) {
+  return $http.get('/admin/detailArtical/', params)
 }

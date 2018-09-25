@@ -8,11 +8,11 @@ function questionQuery () {
 }
 // 提交浏览
 function visitSubmit () {
-  return $http.post('api/visit')
+  return $http.post('/api/visit')
 }
 // 查询浏览
 function visitQuery () {
-  return $http.get('api/visit')
+  return $http.get('/api/visit')
 }
 const commonParams = {
   g_tk : 5381,

@@ -25,38 +25,19 @@
     <p class="desc">求知若渴，虚心若愚</p>
   </div>
   <div class="article">
+    {% for key, artical in articals %}
     <div class="article-item">
-      <a href="javascript:;">
-        <div class="cover">
-          <img src="/public/img/default-cover.png" />
-        </div>
+      <a href="{{'/artical/' + artical._id}}">
         <div class="context">
-          <p class="article-name">JS--作用域精讲</p>
-          <div class="article-intro">
-            每个函数在执行的时候都会行程一个执行期上下文，执行期上下文其实就是由多个作用域所形成的一个集合；这个集合呈链式关系，所以这个执行期上下文又被称作作用域链（作用域链里包含了函数本身的AO对象，以及函数所有父函数的AO对象，根据层级依次排练，层级越近越靠前，一直追溯到全局对象的作用域，即window对象的作用域，window对象的作用域又成全局作用域，形成的活跃对象是Global Object (本文简称GO对象)）。
-          </div>
+          <p class="article-name"><h5>{{artical.title}}</h5></p>
+          <div class="article-intro">{{artical.summary}}</div>
         </div>
         <div class="code">
           <img src="/public/img/code.png" />
         </div>
       </a>
     </div>
-    <div class="article-item">
-      <a href="javascript:;">
-        <div class="cover">
-          <img src="/public/img/default-cover.png" />
-        </div>
-        <div class="context">
-          <p class="article-name">JS--作用域精讲</p>
-          <div class="article-intro">
-            每个函数在执行的时候都会行程一个执行期上下文，执行期上下文其实就是由多个作用域所形成的一个集合；这个集合呈链式关系，所以这个执行期上下文又被称作作用域链（作用域链里包含了函数本身的AO对象，以及函数所有父函数的AO对象，根据层级依次排练，层级越近越靠前，一直追溯到全局对象的作用域，即window对象的作用域，window对象的作用域又成全局作用域，形成的活跃对象是Global Object (本文简称GO对象)）。
-          </div>
-        </div>
-        <div class="code">
-          <img src="/public/img/code.png" />
-        </div>
-      </a>
-    </div>
+    {% endfor %}
     <div class="more">
       <a href="javascript:;">
         <-->&nbsp;&nbsp;More&nbsp;&nbsp;

@@ -1,0 +1,19 @@
+{% extends './layout.html' %} 
+{% block header %}
+<script src="/public/js/moment.js"></script>
+<link rel="stylesheet/less" href="/public/css/home.less" /> 
+{% endblock %} 
+{% block content %}
+<div class="main-content">
+  <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee;">
+    <h3 style="text-align: center; font-size: 20px; font-weight: 600; color: #000; margin-bottom: 10px;">{{ artical.title }}</h3>
+    <p  style="font-size: 14px; color: #999; margin-bottom: 10px;">作者：{{artical.auther}}&nbsp;&nbsp;更新时间：{{artical.updateTime | date('Y-m-d H:i:s', -480, 'CCT') }}</p>
+    <p style="padding: 10px; font-size: 16px;line-height: 30px;background-color: #eee;text-align: justify; color: #666;">{{artical.summary}}</p>
+  </div>
+  <div class="content">
+    {% autoescape %}{{ artical.content}}{% endautoescape %}
+  </div>
+</div>
+<script>
+</script>
+{% endblock %}
