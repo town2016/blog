@@ -9,9 +9,9 @@
     <ul>
       {% for key, val in nav %}
         {% if val.name === '首页' %}
-        <li><a href="{{val.path}}" class="nav-item" name="{{val.path}}">{{val.name}}</a></li>
+        <li><a href="{{val.path}}" class="nav-item" name="{{val.path}}">首页</a></li>
         {% else %}
-        <li><a href="{{val.path}}" class="nav-item" name="{{val.path}}">{{val.name}} ({{val.num}})</a></li>
+        <li><a href="{{'/articalList'+val.path}}" class="nav-item" name="{{'/articalList'+val.path}}">{{val.name}} ({{val.num}})</a></li>
         {% endif %}
       {% endfor %}
     </ul>
@@ -20,6 +20,7 @@
 <script>
   (function () {
     let path = window.location.pathname
+    console.log(path)
     var list = document.querySelector('.navs').querySelectorAll('.nav-item')
     list.forEach(item => {
       if (item.name === path) {

@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
 
 // 初始化并连接数据库
-mongoose.connect('mongodb://localhost:27017/blog', {useNewUrlParser:true}, function (err, mongo) {
+mongoose.connect('mongodb://112.74.39.234:27017/blog', {useNewUrlParser:true}, function (err, mongo) {
   if (err) {
     console.log('数据库连接失败')
   } else {
@@ -159,4 +159,52 @@ app.get('/artical/:id', function (req, res, next) {
   
 })
 
-
+// 文章列表页
+app.get('/articalList/:category', function (req, res, next) {
+  Question.count({}, function (err, questionCount) {
+    if (err) {
+      console.log(err)
+    } else {
+      ClientIP.find({}, function (err, views) {
+        let count = 0
+        if (err) {
+          console.log(err)
+        } else {
+          views.forEach(item => {
+            count += item.count
+          })
+        }
+        Category.find({}, function (err, categorys) {
+          let responseData = {
+            title: '个人博客__town',
+            dateLength: Math.ceil((new Date().getTime() - blog_createTime) / 86400000),
+            viewCount: count,
+            nav: [
+              {
+                name: '首页',
+                path: '/'
+              }
+            ]
+          }
+          categorys.forEach(item => {
+            responseData.nav.push({
+              name: item.categoryName,
+              path: `/${item.categoryCode}`,
+              num: item.count
+            })
+          })
+          var category = req.params.category
+          Artical.find({category: category}).sort({'updateTime': -1}).limit(15).exec(function (err, articals) {
+            if (err) {
+              console.log(err)
+            } else {
+              console.log(articals)
+              responseData.articals = articals
+              res.render('articalList', responseData)
+            }
+          })
+        })
+      })
+    }
+  })
+})

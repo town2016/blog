@@ -1,29 +1,35 @@
 const tableModel = [{
   label: '标题',
-  prop: 'title'
+  prop: 'title',
+  width: 120
 }, {
   label: '简介',
   prop: 'summary'
 }, {
   label: '分类',
-  prop: 'category'
+  prop: 'category',
+  width: 60
 }, {
   label: '创建时间',
   prop: 'createTime',
+  width: 150,
   formatter: function (h, row) {
     return h('span', {}, row.createTime ? moment(new Date(row.createTime)).format('YYYY-MM-DD hh:mm:ss') : '')
   }
 }, {
   label: '更新时间',
   prop: 'updateTime',
+  width: 150,
   formatter: function (h, row) {
     return h('span', {}, row.updateTime ? moment(new Date(row.updateTime)).format('YYYY-MM-DD hh:mm:ss') : '')
   }
 }, {
   label: '作者',
-  prop: 'auther'
+  prop: 'auther',
+  width: 60
 }, {
   label: '操作',
+  width: 110,
   formatter: function (h, row) {
     return h('div', {
       class: {

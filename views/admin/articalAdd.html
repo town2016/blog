@@ -56,11 +56,7 @@ function save () {
   params.content = editor.txt.html()
   saveArtical(params).then(function (res) {
     if (res.data.code === 200) {
-      message.msg({
-        type: 'success',
-        message: res.data.message
-      })
-      // window.location.href = '/admin/artical'
+      window.location.href = '/admin/artical'
     } else {
       message.msg({
         type: 'error',

@@ -194,6 +194,7 @@ router.post('/saveArtical', function (req, res, next) {
         response.code = 500
         response.message = '操作失败'
         response.data = err
+        res.json(response)
       } else {
         response.message = '操作成功'
         Artical.countDocuments({category: params.category}, function (countErr, count) {
@@ -207,6 +208,8 @@ router.post('/saveArtical', function (req, res, next) {
                 cate.update({count: count, updateTime: new Date()}, function (categoryErr, row) {
                   if (categoryErr) {
                     console.log(err)
+                  } else {
+                    res.json(response)
                   }
                 })
               }
@@ -214,7 +217,6 @@ router.post('/saveArtical', function (req, res, next) {
           }
         })
       }
-      
     })
   }
 })

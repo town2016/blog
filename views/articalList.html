@@ -1,0 +1,30 @@
+{% extends './layout.html' %} 
+{% block header %}
+<script src="/public/js/moment.js"></script>
+<link rel="stylesheet/less" href="/public/css/home.less" /> 
+{% endblock %} 
+{% block content %}
+<div class="main-content">
+  <div class="sub-title">
+    <h5>文章列表</h5>
+    <p class="desc">求知若渴，虚心若愚</p>
+  </div>
+  <div class="article">
+    {% for key, artical in articals %}
+    <div class="article-item">
+      <a href="{{'/artical/' + artical._id}}">
+        <div class="context">
+          <p class="article-name"><h5>{{artical.title}}</h5></p>
+          <div class="article-intro">{{artical.summary}}</div>
+        </div>
+        <div class="code">
+          <img src="/public/img/code.png" />
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<script>
+</script>
+{% endblock %}
