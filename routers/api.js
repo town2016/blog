@@ -3,6 +3,15 @@ const router = express.Router()
 const Question = require('../models/Question')
 const ClientIP = require('../models/ClientIP')
 const axios = require('axios')
+const nodemailer = require('nodemailer')
+var mailTransport = nodemailer.createTransport({
+    host : 'smtp.sina.com',
+    secureConnection: true, // 使用SSL方式（安全方式，防止被窃取信息）
+    auth : {
+        user : 'nanfang528@sina.com',
+        pass : '13538224239'
+    }
+});
 // 定义统一返回数据格式
 let response
 router.use(function (req, res, next) {
@@ -199,5 +208,25 @@ router.post('/visit', function (req, res, next) {
   })
 })
 
+// 邮件发送
+router.post('/mailto', function (req, res, next) {
+  var params = {
+    from: 'nanfang528@sina.com',
+    to: '"1026032608@qq.com',
+    subject : '一封来自Node Mailer的邮件',
+    text: '一封来自Node Mailer的邮件',
+    html: '<h1>你好，这是一封来自NodeMailer的邮件！</h1>
+  }
+  mailTransport.sendMail(options, function(err, msg){
+    if(err){
+        console.log(err);
+        res.render('index', { title: err });
+    }
+    else {
+        console.log(msg);
+    }
+  })
+  
+})
 
 module.exports = router
