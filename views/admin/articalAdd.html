@@ -44,7 +44,7 @@ editor.customConfig.customUploadImg = function (files, insert) {
   var formData = new FormData()
   formData.append('file', files[0])
   $http.post('/admin/fileUpload', formData).then(res => {
-    insert(res.data.data)
+    insert(window.location.origin + res.data.data)
   })
 }
 editor.create()
