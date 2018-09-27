@@ -6,13 +6,15 @@
     <title>{{title}}</title>
     <link rel="stylesheet/less" type="text/css" href="/public/css/reset.less" />
     <link rel="stylesheet/less" type="text/css" href="/public/css/animate.less" />
-    <link rel="stylesheet/less" type="text/css" href="/public/css/index.less" />
+    <link rel="stylesheet/less" type="text/css" href="/public/css/index.less" /> 
+    <link rel="stylesheet" href="/public/css/icon.css" />
     {% block header %}{% endblock %}
-    <script src="/public/js/axios.min.js" ></script>
-    <script src="/public/js/jquery-1.11.0.js" ></script>
-    <script src="/public/utils/$http.js" ></script>
+    <script src="/public/js/axios.min.js"></script>
+    <script src="/public/js/jquery-1.11.0.js"></script>
+    <script src="/public/utils/$http.js"></script>
     <script src="/public/js/less.min.js"></script>
-    <script src="/public/js/layout.js" ></script>
+    <script src="/public/js/layout.js"></script>
+    <script src="/public/utils/message.js"></script>
   </head>
 
   <body>
@@ -79,8 +81,8 @@
                 <p class="name">town</p>
                 <p class="job">深圳 | 前端</p>
                 <div>
-                  <button class="warning" onclick="_openDialog()">提问</button>
-                  <button>沟通</button>
+                  <button class="warning" onclick="_openDialog('questionForm')">提问</button>
+                  <button onclick="_openDialog('emailForm')">沟通</button>
                 </div>
               </div>
             </div>
@@ -104,91 +106,145 @@
     <!--遮罩层-->
     <div class="mask" onclick="_closeDialog()">
       <div class="body">
-        <div class="header"><span>QUESTION</span></div>
-        <div class="question">
-          <form id="questionForm">
+        <div id="question">
+          <div class="header"><span>QUESTION</span></div>
+          <div class="question">
+            <form id="questionForm">
+              <div class="form-group">
+                <label>qustion</label>
+                <div class="form-control">
+                  <input placeholder="please input questions" name="question" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>category</label>
+                <div class="form-control">
+                  <select placeholder='please select category' name='category'>
+                    <option value="h5">h5</option>
+                    <option value="css">css</option>
+                    <option value="native">js</option>
+                    <option value="node">node</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>description</label>
+                <div class="form-control">
+                  <textarea placeholder="please make a description of question" name='description'></textarea>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="email">
+          <div class="header"><span>COMMUNICATION</span></div>
+          <form id="emailForm">
             <div class="form-group">
-              <label>qustion</label>
+              <label>nickName</label>
               <div class="form-control">
-                <input placeholder="please input questions" name="question"/>
+                <input placeholder="please input you nick" name="nickName" />
               </div>
             </div>
             <div class="form-group">
-              <label>category</label>
+              <label>email</label>
               <div class="form-control">
-                <select placeholder='please select category' name='category'>
-                  <option value="h5">h5</option>
-                  <option value="css">css</option>
-                  <option value="native">js</option>
-                  <option value="node">node</option>
-                </select>
+                <input placeholder="please input you email" name="email" />
               </div>
             </div>
             <div class="form-group">
-              <label>description</label>
+              <label>content</label>
               <div class="form-control">
-                <textarea placeholder="please make a description of question" name='description'></textarea>
+                <textarea placeholder="please input you content" name="content" ></textarea>
               </div>
             </div>
           </form>
-          <div class="button">
-            <button class="warning" onclick='goQuestion()'>submit</button>
-            <button onclick="_closeDialog()">cancel</button>
-          </div>
+        </div>
+        <div class="button" align="right">
+          <button class="warning" onclick='_submit()'>submit</button>
+          <button onclick="_closeDialog()">cancel</button>
         </div>
       </div>
     </div>
     <audio src="" id="player" autoplay></audio>
   </body>
   <script>
-    function _openDialog() {
+    var activeForm = ''
+    function _openDialog(sign) {
+      activeForm = sign
       document.querySelector('.mask').classList.add('active')
+      if (sign === 'emailForm') {
+        document.getElementById("email").style.display= 'block'
+        document.getElementById("question").style.display= 'none'
+      } else {
+        document.getElementById("email").style.display= 'none'
+        document.getElementById("question").style.display= 'block'
+      }
     }
 
     function _closeDialog() {
       document.getElementById('questionForm').reset()
+      document.getElementById('emailForm').reset()
       document.querySelector('.mask').classList.remove('active')
     }
     
-    document.querySelector('.body').addEventListener('click', function (event) {
+    function _submit (event) {
+      event = event || window.event
+      event.stopPropagation()
+      if (activeForm === 'questionForm') {
+        goQuestion()
+      } else {
+        mailto()
+      }
+    }
+
+    document.querySelector('.body').addEventListener('click', function(event) {
       event = event || window.event
       event.stopPropagation()
     }, false)
-    
+
     // 表单验证
-    function autoValidate (elem) {
-      elem.addEventListener('change', function (event) {
+    function autoValidate(elem) {
+      elem.addEventListener('change', function(event) {
         event = event || window.event
-        if (!event.target.value) {
+        if(!event.target.value) {
           elem.parentElement.classList.add('error')
+          elem.parentElement.querySelector('.tipMsg').style.display = 'block'
         } else {
           elem.parentElement.classList.remove('error')
+          elem.parentElement.querySelector('.tipMsg').style.display = 'none'
         }
       }, false)
     }
     // 表单验证错误提示
-    function tips (elem, message) {
+    function tips(elem, message) {
       elem.parentElement.classList.add('error')
+      if (elem.parentElement.querySelector('.tipMsg')) {
+        elem.parentElement.querySelector('.tipMsg').innerText = message
+        elem.parentElement.querySelector('.tipMsg').style.display = 'block'
+      } else {
+        var tipMsg = document.createElement('div')
+        tipMsg.className = 'tipMsg'
+        tipMsg.innerText = message
+        elem.parentElement.appendChild(tipMsg)
+      }
     }
     // 提交提问
-    function goQuestion (event) {
-      event = event || window.event
-      event.stopPropagation()
+    function goQuestion() {
       var forms = document.getElementById('questionForm').elements
       var params = {}
       var valid = true
-      for (var i = 0; i < forms.length; i++) {
+      for(var i = 0; i < forms.length; i++) {
         var item = forms[i]
         params[item.name] = item.value
-        if (!item.value) {
+        if(!item.value) {
           valid = false
           autoValidate(item)
           tips(item, item.name + '为必填项')
         }
       }
-      if (valid) {
+      if(valid) {
         let res = questionSubmit(params).then(res => {
-          if (res.data.code === 200) {
+          if(res.data.code === 200) {
             location.reload()
           }
         })
@@ -205,15 +261,56 @@
       player.name = 0
       player.play()
       control.classList.add('play')
-      player.addEventListener('ended', function () {
-        var index = player.name*1 + 1
-        if (index >= list.length) {
+      player.addEventListener('ended', function() {
+        var index = player.name * 1 + 1
+        if(index >= list.length) {
           index = 0
         }
         player.name = index
         player.src = list[index].purl
       }, false)
     })
+
+    function mailto() {
+      var forms = document.getElementById('emailForm').elements
+      var params = {}
+      var valid = true
+      for(var i = 0; i < forms.length; i++) {
+        var item = forms[i]
+        params[item.name] = item.value
+        if(!item.value) {
+          valid = false
+          autoValidate(item)
+          tips(item, item.name + '为必填项')
+        }
+        if (item.name === 'email') {
+           let reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
+           if (!reg.test(item.value)) {
+              valid = false
+              autoValidate(item)
+              tips(item, '邮箱格式不正确')
+           }
+        }
+      }
+      if (valid) {
+        var query = {
+          senderEmail: params.email,
+          html: params.content,
+          nickName: params.nickName,
+          subject: '来自' + params.nickName + '的邮件'
+        }
+        sendEmail(query).then(res => {
+          if (res.data.code === 200) {
+            message.msg({
+              message: res.data.message,
+              type: 'success'
+            })
+            _closeDialog()
+          }
+        })
+      }
+      
+    }
   </script>
 
 </html>

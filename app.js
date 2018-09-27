@@ -199,7 +199,7 @@ app.get('/articalList/:category', function (req, res, next) {
               console.log(err)
             } else {
               console.log(articals)
-              responseData.articals = articals
+              responseData.articals = articals || []
               res.render('articalList', responseData)
             }
           })

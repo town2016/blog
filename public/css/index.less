@@ -169,9 +169,20 @@
     }
     .form-control{
         .flex-1;
+        position: relative;
         border: 1px solid #999;
         .borderRadius(4px);
-        overflow: hidden;
+        input,textarea,select{
+            .borderRadius(4px);
+        }
+        .tipMsg{
+            position: absolute;
+            top: 100%;
+            left: 0;
+            color: red;
+            font-size: 12px;
+            line-height: 22px;
+        }
     }
     .form-control.error {
         border-color: red;

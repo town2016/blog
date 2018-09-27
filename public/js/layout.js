@@ -25,3 +25,7 @@ const commonParams = {
 function getSongList(){
   return $http.get('/api/songList')
 }
+
+function sendEmail (params) {
+  return $http.post('/api/mailto', params)
+}

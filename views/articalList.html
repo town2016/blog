@@ -9,6 +9,7 @@
     <h5>文章列表</h5>
     <p class="desc">求知若渴，虚心若愚</p>
   </div>
+  {% if articals.length > 0 %}
   <div class="article">
     {% for key, artical in articals %}
     <div class="article-item">
@@ -24,6 +25,10 @@
     </div>
     {% endfor %}
   </div>
+  {% else %}
+  <div class="empty" style="text-align: center; font-size: 14px;
+    color: #aaa; line-height: 50px;">该分类下暂无文章</div>
+  {% endif %}
 </div>
 <script>
 </script>

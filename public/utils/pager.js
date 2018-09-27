@@ -17,6 +17,7 @@ function Pager(mount, fn) {
     }
   }
   this.change = function () {
+    if (this.pager.total === 0) return
     fn && fn(this.curPage, this.pageSize)
   }
   this.totalPage = Math.ceil(this.pager.totalNum / this.pageSize)

@@ -1,0 +1,74 @@
+{% extends './layout.html' %} {% block head %}
+<script src="/public/js/moment.js"></script>
+<script src="/public/utils/pager.js"></script>
+<script src="/public/utils/dialog.js"></script>
+<script src="/public/utils/form.js"></script>
+<script src="/public/utils/validate.js"></script>
+<script src="/public/js/admin/email.js"></script>
+<script src="/public/js/wangEditor.js"></script>
+<style type="text/css">
+	.w-e-text-container{
+	  height: 467px !important;
+	}
+</style>
+{% endblock %} {% block content %}
+<div class="sub-title">
+  邮件编辑
+</div>
+<div class="content-inner">
+  <div class="iform" id="articalForm"></div>
+  <div class="iform" style="padding: 0 10px;">
+    <div class="form-group">
+      <label class="form-label">回复内容</label>
+      <div class="form-control" id="contentEditor" style="border: none; height: 500px;"></div>
+    </div>
+  </div>
+  <div class="form-btns" style="padding-left: 140px;">
+    <span class="btn btn-success" onclick="save()">保存</span>
+  </div>
+</div>
+<script>
+// 拉取分类列表
+var iform,validator;
+iform = new Iform(document.getElementById("articalForm"), formModel)
+// 表单验证
+validator = new Validater(document.getElementById(iform.id))
+// 编辑器
+var wEditor = window.wangEditor
+var editor = new wEditor('#contentEditor')
+editor.customConfig.customUploadImg = function (files, insert) {
+  var formData = new FormData()
+  formData.append('file', files[0])
+  $http.post('/admin/fileUpload', formData).then(res => {
+    insert(res.data.data)
+  })
+}
+editor.create()
+if (window.location.search) {
+  var id = window.location.search.split('=')[1]
+  detailEmail([id]).then(function (res) {
+    iform.form.formData = res.data.data
+    editor.txt.html(res.data.data.reply)
+  })
+}
+function save () {
+  let params = {
+    to: iform.datas.senderEmail,
+    subject: '邮件回复',
+    html: editor.txt.html()
+  }
+  if (window.location.search) {
+    params._id = iform.datas._id
+    params.reply = editor.txt.html()
+  }
+  saveEmail(params).then(function (res) {
+    let msg = {
+      message: res.data.message
+    }
+    res.data.code === 200 ? msg.type = 'success' : 'error'
+    res.data.code === 200 ? (window.location.href = '/admin/emailRecords') : message.msg(msg)
+    
+  })
+}
+</script>
+{% endblock %}

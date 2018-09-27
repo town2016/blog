@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Question = require('../models/Question')
 const ClientIP = require('../models/ClientIP')
+const Email = require('../models/Email')
 const axios = require('axios')
 const nodemailer = require('nodemailer')
 var mailTransport = nodemailer.createTransport({
@@ -212,21 +213,101 @@ router.post('/visit', function (req, res, next) {
 router.post('/mailto', function (req, res, next) {
   var params = {
     from: 'nanfang528@sina.com',
-    to: '"1026032608@qq.com',
-    subject : '一封来自Node Mailer的邮件',
-    text: '一封来自Node Mailer的邮件',
-    html: '<h1>你好，这是一封来自NodeMailer的邮件！</h1>
+    to: req.body.to ? req.body.to : '1026032608@qq.com'
   }
-  mailTransport.sendMail(options, function(err, msg){
+  params = Object.assign({}, req.body, params)
+  mailTransport.sendMail(params, function(err, msg){
     if(err){
-        console.log(err);
-        res.render('index', { title: err });
+      console.log(err);
+      response.code = 500
+      response.data = err
+      res.json(response)
     }
     else {
-        console.log(msg);
+      if (req.body._id) {
+        Email.updateOne({_id: req.body._id}, {status: 2, reply: req.body.reply}, function (uErr) {
+          if (uErr) {
+            console.log(uErr)
+            response.data = uErr
+            response.message = '操作失败'
+          } else {
+            response.message = '操作成功'
+          }
+          res.json(response)
+        })
+        return
+      }
+      var _email = {
+        from: params.from,
+        to: params.to,
+        createTime: new Date(),
+        addressee: req.body.addressee || 'town',
+        sender: req.body.nickName,
+        status: 1,
+        senderEmail: params.senderEmail,
+        subject: params.subject,
+        content: params.html
+      }
+      let email = new Email(_email)
+      email.save(function (err, row) {
+        if (err) {
+          console.log(err)
+          response.data = err
+          response.message = '邮件保存失败'
+        } else {
+          response.message = '邮件发送成功'
+        }
+        res.json(response)
+      })
     }
   })
-  
+})
+// 邮件列表
+router.get('/emailList', function (req, res, next) {
+  var limit = Number(req.body.pageSize),skip = (Number(req.body.pageNum) - 1) * limit;
+  Email.countDocuments({}, function (er, count) {
+    if (er) {
+      console.log(er)
+    } else {
+      Email.find({}).sort({createTime: '-1'}).limit(limit).skip(skip).exec(function (err, emails) {
+        if (err) {
+          response.code = 500
+          response.data = err
+        } else {
+          response.data = {}
+          response.data.list = emails
+          response.data.total = count
+        }
+        res.json(response)
+      })
+    }
+  })
+})
+
+// 邮件删除
+router.get('/deleteEmail', function (req, res, next) {
+  Email.remove({_id: req.query.id}, function (err) {
+    if (err) {
+      response.code = 500
+      response.message = '操作失败'
+    } else {
+      response.message = '操作成功'
+    }
+    res.json(response)
+  })
+})
+// 获取邮件详情
+router.get('/detailEmail/:id', function (req, res, next) {
+  Email.findById(req.params.id, function (err, email) {
+    if (err) {
+      console.log(err)
+      response.code = 500
+      response.data = err
+    } else {
+      response.data = email
+    }
+    res.json(response)
+  })
 })
 
 module.exports = router

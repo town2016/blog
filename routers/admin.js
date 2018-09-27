@@ -33,6 +33,14 @@ router.get('/question', function (req, res, next) {
 router.get('/browseRecords', function (req, res, next) {
   res.render('admin/browseRecords')
 })
+// 渲染邮件记录页
+router.get('/emailRecords', function (req, res, next) {
+  res.render('admin/email')
+})
+// 渲染编辑页
+router.get('/emailEdit', function (req, res, next) {
+  res.render('admin/emailEdit')
+})
 
 // 类别列表查询
 router.get('/categorys', function (req, res, next) {
