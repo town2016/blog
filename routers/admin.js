@@ -277,8 +277,6 @@ router.get('/detailArtical/:id', function (req, res, next) {
 
 // 文章图片上传
 router.post('/fileUpload',  upload.single("file"), function (req, res, next) {
-    // var files =  req.files.thumbnail
-    console.log(req.file)
      var tmp_path = req.file.path;
      
     // 指定文件上传后的目录 - 示例为"images"目录。 

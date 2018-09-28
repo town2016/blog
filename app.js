@@ -55,9 +55,10 @@ const Question = require('./models/Question')
 const ClientIP = require('./models/ClientIP')
 const Category = require('./models/Category')
 const Artical = require('./models/Artical')
+const Email = require('./models/Email')
 // 渲染首页
 app.get('/', function (req, res, next) {
-  Question.count({}, function (err, questionCount) {
+  Email.countDocuments({}, function (err, emails) {
     if (err) {
       console.log(err)
     } else {
@@ -75,7 +76,7 @@ app.get('/', function (req, res, next) {
             let responseData = {
               title: '个人博客__town',
               questions: list,
-              questionCount: questionCount,
+              emails: emails,
               dateLength: Math.ceil((new Date().getTime() - blog_createTime) / 86400000),
               viewCount: count,
               nav: [
@@ -110,7 +111,7 @@ app.get('/', function (req, res, next) {
 
 // 渲染文章详情页
 app.get('/artical/:id', function (req, res, next) {
-  Question.count({}, function (err, questionCount) {
+  Email.count({}, function (err, emails) {
     if (err) {
       console.log(err)
     } else {
@@ -126,6 +127,7 @@ app.get('/artical/:id', function (req, res, next) {
         Category.find({}, function (err, categorys) {
           let responseData = {
             title: '个人博客__town',
+            emails: emails,
             dateLength: Math.ceil((new Date().getTime() - blog_createTime) / 86400000),
             viewCount: count,
             nav: [
@@ -161,7 +163,7 @@ app.get('/artical/:id', function (req, res, next) {
 
 // 文章列表页
 app.get('/articalList/:category', function (req, res, next) {
-  Question.count({}, function (err, questionCount) {
+  Email.count({}, function (err, emails) {
     if (err) {
       console.log(err)
     } else {
@@ -177,6 +179,7 @@ app.get('/articalList/:category', function (req, res, next) {
         Category.find({}, function (err, categorys) {
           let responseData = {
             title: '个人博客__town',
+            emails: emails,
             dateLength: Math.ceil((new Date().getTime() - blog_createTime) / 86400000),
             viewCount: count,
             nav: [
@@ -198,7 +201,6 @@ app.get('/articalList/:category', function (req, res, next) {
             if (err) {
               console.log(err)
             } else {
-              console.log(articals)
               responseData.articals = articals || []
               res.render('articalList', responseData)
             }
