@@ -4,6 +4,7 @@ const mongoose = require('mongoose') // 加载数据库操作模块
 const bodyParser = require('body-parser') // 加载请求体的解析插件
 const app = express()
 const moment = require('./public/js/moment')
+const qrImg = require('qr-image')
 global.db
 // 设置模板路径
 app.set('views', './views')
@@ -158,7 +159,56 @@ app.get('/artical/:id', function (req, res, next) {
       })
     }
   })
-  
+})
+// 渲染文章详情页
+app.get('/artical_m/:id', function (req, res, next) {
+  Email.count({}, function (err, emails) {
+    if (err) {
+      console.log(err)
+    } else {
+      ClientIP.find({}, function (err, views) {
+        let count = 0
+        if (err) {
+          console.log(err)
+        } else {
+          views.forEach(item => {
+            count += item.count
+          })
+        }
+        Category.find({}, function (err, categorys) {
+          let responseData = {
+            title: '个人博客__town',
+            emails: emails,
+            dateLength: Math.ceil((new Date().getTime() - blog_createTime) / 86400000),
+            viewCount: count,
+            nav: [
+              {
+                name: '首页',
+                path: '/'
+              }
+            ]
+          }
+          categorys.forEach(item => {
+            responseData.nav.push({
+              name: item.categoryName,
+              path: `/${item.categoryCode}`,
+              num: item.count
+            })
+          })
+          var id = req.params.id
+          Artical.findById(id, function (err, artical) {
+            responseData.artical = {}
+            if (err) {
+              responseData.artical.content = '未找到该文章，请确认文章是否存在'
+            } else {
+              responseData.artical = artical
+            }
+            res.render('artical_m', responseData)
+          })
+        })
+      })
+    }
+  })
 })
 
 // 文章列表页
@@ -196,8 +246,8 @@ app.get('/articalList/:category', function (req, res, next) {
               num: item.count
             })
           })
-          var category = req.params.category
-          Artical.find({category: category}).sort({'updateTime': -1}).limit(15).exec(function (err, articals) {
+          var query = req.params.category === 'all' ? {} : {category: req.params.category}
+          Artical.find(query).sort({'updateTime': -1}).limit(15).exec(function (err, articals) {
             if (err) {
               console.log(err)
             } else {
@@ -210,3 +260,14 @@ app.get('/articalList/:category', function (req, res, next) {
     }
   })
 })
+
+// 二维码生成
+app.get("/qrcode", async (req, res, next) => {
+  console.log(req.headers)
+    const qrcode = qrImg.image('http://'+req.headers.host + req.query.link, {
+        ec_level: '30%',
+        margin: 1
+    });
+    res.type("png");
+    qrcode.pipe(res);
+});

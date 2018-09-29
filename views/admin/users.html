@@ -1,0 +1,162 @@
+{% extends './layout.html' %} {% block head %}
+<script src="/public/js/moment.js"></script>
+<script src="/public/utils/pager.js"></script>
+<script src="/public/utils/dialog.js"></script>
+<script src="/public/utils/form.js"></script>
+<script src="/public/utils/validate.js"></script>
+<script src="/public/utils/dialog.js"></script>
+<script src="/public/utils/message.js"></script>
+{% endblock %} {% block content %}
+<div class="sub-title">
+  用户管理
+</div>
+<div class="content-inner">
+  <div class="btn-group">
+    <span class="btn btn-success" onclick="add()">新增</span>
+  </div>
+  <div class="list">
+    <div class="itable"></div>
+  </div>
+  <div class="iform" id="userForm" style="display: none;"></div>
+</div>
+<script>
+  var module,
+  formModel = [
+    {
+      tag: 'input',
+      label: '账号',
+      prop: 'account',
+      attrs: {
+        placeholder: 'please input your account'
+      }
+    }, {
+      tag: 'input',
+      label: '密码',
+      prop: 'pwd',
+      attrs: {
+        placeholder: 'please input your password',
+        type: 'password'
+      }
+    }, {
+      tag: 'input',
+      label: '角色',
+      prop: 'role',
+      attrs: {
+        placeholder: 'please input your password',
+        type: 'password'
+      }
+    }
+  ],
+  btns = [{
+    text: '保存',
+    classes: ['btn-primary'],
+    on: {
+      click() {
+        save()
+      }
+    }
+  }, {
+    text: '重置',
+    classes: ['btn-default'],
+    on: {
+      click() {
+        resetForm()
+      }
+    }
+  }],
+  tableModel = [
+    {
+      prop: 'account',
+      label: '用户名'
+    }, {
+      prop: 'role',
+      label: '角色'
+    }, {
+      prop: 'pwd',
+      label: '密码'
+    }, {
+      label: '操作',
+      formatter: function (h, row) {
+        return h('div', {
+          class: {
+            'table-btns': true
+          },
+          children: [
+            h('span', {
+              class: {
+                'btn-text': true
+              },
+              on: {
+                click: function () {
+                  message.confirm('此操作不可恢复，是否继续？', function () {
+                    deleteUser(row._id)
+                  })
+                }
+              }
+            }, '删除')
+          ]
+        })
+      }
+    }
+  ];
+  // 创建表格
+  var itable = new Table(tableModel, document.querySelector('.itable'))
+  itable.create()
+  // 创建表单
+  var iform = new Iform(document.getElementById("userForm"), formModel, btns)
+  // 拉取用户列表
+  getUserList()
+  function getUserList() {
+    $http.get('/admin/userList').then(res => {
+      itable.tableData = res.data.data || []
+    })
+  }
+  // 新增用户
+  function add () {
+    module = dialog({
+      title: '新增账户',
+      maskClose: true,
+      content: document.getElementById("userForm"),
+      close: function () {
+        document.getElementById(iform.id).reset()
+      }
+    })
+  }
+  // 保存用户信息
+  function save () {
+    var params = iform.datas
+    $http.post('/admin/userSave', params).then(function (res) {
+      if (res.data.code === 200) {
+        getUserList()
+        module.close()
+        message.msg({
+          message: res.data.message,
+          type: 'success'
+        })
+      } else {
+        message.msg({
+          message: res.data.message,
+          type: 'error'
+        })
+      }
+    })
+  }
+  // 删除用户
+  function deleteUser (id) {
+    $http.get('/admin/userDelete', {id: id}).then(function (res) {
+      if (res.data.code === 200) {
+        getUserList()
+        message.msg({
+          message: res.data.message,
+          type: 'success'
+        })
+      } else {
+        message.msg({
+          message: res.data.message,
+          type: 'error'
+        })
+      }
+    })
+  }
+</script>
+{% endblock %}

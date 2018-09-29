@@ -1,8 +1,10 @@
 const express = require('express')
 const router = express.Router()
+const md5 = require('js-md5')
 const Category = require('../models/Category')
 const Record = require('../models/ClientIP')
 const Artical = require('../models/Artical')
+const User = require('../models/User')
 var app = express()
 var fs = require('fs')
 var multer = require('multer')
@@ -41,7 +43,14 @@ router.get('/emailRecords', function (req, res, next) {
 router.get('/emailEdit', function (req, res, next) {
   res.render('admin/emailEdit')
 })
-
+// 登录
+router.get('/login', function (req, res, next) {
+  res.render('admin/login')
+})
+// 用户管理
+router.get('/users', function (req, res, next) {
+  res.render('admin/users')
+})
 // 类别列表查询
 router.get('/categorys', function (req, res, next) {
   Category.find().then(categorys => {
@@ -293,5 +302,60 @@ router.post('/fileUpload',  upload.single("file"), function (req, res, next) {
     });
 })
 
-
+// 用户列表
+router.get('/userList', function (req, res, next) {
+  var query = req.query || {}
+  User.find(query, function (err, rows) {
+    if (err) {
+      console.log(err)
+    } else {
+      response.data = rows
+      res.json(response)
+    }
+  })
+})
+// 新增用户
+router.post('/userSave', function (req, res, next) {
+  var params = req.body
+  params.pwd = md5(params.pwd)
+  var user = new User(params)
+  user.save().then(function (row) {
+    console.log(arguments)
+    if (row) {
+      response.message = '操作成功'
+    } else {
+      response.code = 500
+      response.message = '操作失败'
+      response.data = row
+    }
+    res.json(response)
+  })
+})
+// 删除用户
+router.get('/userDelete', function (req, res, next) {
+  User.deleteOne({_id: req.query.id}).then(function (docs) {
+    if (docs) {
+      response.message = '操作成功'
+    } else {
+      response.code = 500
+      response.message = '操作失败'
+      response.data = row
+    }
+    res.json(response)
+  })
+})
+// 用户登录
+router.post('/login', function (req, res, next) {
+  var params = req.body
+  User.find(params).then(function (docs) {
+    if (docs.length === 0) {
+      response.code = 500
+      response.message = '用户名或者密码错误'
+      response.data = docs
+    } else {
+      response.message = '操作成功'
+    }
+    res.json(response)
+  })
+})
 module.exports = router

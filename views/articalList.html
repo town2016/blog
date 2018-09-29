@@ -15,11 +15,14 @@
     <div class="article-item">
       <a href="{{'/artical/' + artical._id}}">
         <div class="context">
-          <p class="article-name"><h5>{{artical.title}}</h5></p>
+          <div class="article-name">
+            <h5>{{artical.title}}</h5>
+            <span>{{artical.updateTime | date('Y-m-d H:i:s', -480, 'CCT') }}</span>
+          </div>
           <div class="article-intro">{{artical.summary}}</div>
         </div>
         <div class="code">
-          <img src="/public/img/code.png" />
+          <img src="{{'/qrcode?link=/artical_m/' + artical._id}}" />
         </div>
       </a>
     </div>

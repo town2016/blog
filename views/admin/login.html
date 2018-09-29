@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="keywords" content="深圳，深圳互动，深互动，深世界，town，blog，博客，个人博客，Vue，node，JS，HTML，CSS，IT技术，sz" />
+    <meta name="description" content="个人前端技术博客，主要记录自己的前端学习中遇到的问题，和一些前端技术的学习笔记。网站目前挂在深圳互动深世界科技有限公司，深圳互动深世界是一家依托于互联网的高新技术科技公司，公司目前的核心业务为深圳本地生活服务，为深圳人提供生活中需要的各种信息的查询，类似于深圳本地宝的信息平台" />
+    <link rel="stylesheet" type="text/css" href="/public/css/icon.css" />
+    <link rel="stylesheet/less" type="text/css" href="/public/css/reset.less" />
+    <link rel="stylesheet/less" type="text/css" href="/public/css/admin.less"/>
+    <script src="/public/js/axios.min.js"></script>
+    <script src="/public/utils/$http.js"></script>
+    <script src="/public/js/less.min.js"></script>
+    <script src="/public/utils/form.js"></script>
+    <script src="/public/utils/common.js"></script>
+    <script src="/public/js/md5.min.js"></script>
+    <script src="/public/utils/message.js"></script>
+		<title>博客管理系统-登录</title>
+		<style type="text/css">
+			.loginWrapper{
+			  position: absolute;
+			  width: 400px;
+			  padding: 15px 20px 30px 20px;
+			  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+			  top: 30%;
+			  left: 50%;
+			  margin-left: -200px;
+			  border-radius: 4px;
+			}
+			.loginWrapper h5{
+			  line-height: 30px;
+			  text-align: center;
+			  margin-bottom: 15px;
+			  font-size: 18px;
+			}
+			.iform .form-group .form-label{
+			  width: 60px;
+			}
+			.iform .form-group .form-control, .iform .form-btns{
+			  margin: 0 0 0 70px;
+			}
+		</style>
+	</head>
+	<body>
+	  <div class="loginWrapper">
+      <h5>sign in</h5>
+      <div class="iform" id="loginForm"></div>
+    </div>
+	</body>
+	<script>
+	  var loginForm = document.getElementById('loginForm'), 
+	      formModel = [
+	        {
+            tag: 'input',
+            label: 'account',
+            prop: 'account',
+            attrs: {
+              placeholder: 'please input your account'
+            }
+          }, {
+            tag: 'input',
+            label: 'password',
+            prop: 'pwd',
+            attrs: {
+              placeholder: 'please input your password',
+              type: 'password'
+            }
+          }
+	      ]
+	  var iform = new Iform(loginForm, formModel, [
+	    {
+	      text: '登录',
+	      classes: ['btn-primary', 'block'],
+	      on: {
+	        click: function () {
+	          login()
+	        }
+	      }
+	    }
+	  ])
+	  function login () {
+	    var params = iform.datas
+	    var pwd = iform.datas.pwd
+	    params.pwd = md5(pwd)
+	    $http.post('/admin/login', params).then(function (res) {
+	      if (res.data.code === 200) {
+	        window.location.href = '/admin'
+	      } else {
+	        message.msg({
+	          message: res.data.message,
+	          type: 'error'
+	        })
+	      }
+	    })
+	  }
+	</script>
+</html>

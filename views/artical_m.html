@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+		<meta name="keywords" content="深圳，深圳互动，深互动，深世界，town，blog，博客，个人博客，Vue，node，JS，HTML，CSS，IT技术，sz" />
+    <meta name="description" content="个人前端技术博客，主要记录自己的前端学习中遇到的问题，和一些前端技术的学习笔记。网站目前挂在深圳互动深世界科技有限公司，深圳互动深世界是一家依托于互联网的高新技术科技公司，公司目前的核心业务为深圳本地生活服务，为深圳人提供生活中需要的各种信息的查询，类似于深圳本地宝的信息平台" />
+		<link rel="stylesheet/less" type="text/css" href="/public/css/reset.less" />
+    <script src="/public/js/less.min.js"></script>
+    <link rel="stylesheet/less" href="/public/css/home.less" /> 
+		<title>{{ artical.title }}</title>
+		<style type="text/css">
+		  body{
+		    padding:0 15px;
+		    box-sizing: border-box;
+		  }
+			img{
+			  display: block;
+			  width: 100%;
+			}
+		</style>
+	</head>
+	<body>
+	  <div class="main-content">
+      <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee;">
+        <h3 style="text-align: center; font-size: 20px; font-weight: 600; color: #000; margin-bottom: 10px;">{{ artical.title }}</h3>
+        <p  style="font-size: 14px; color: #999; margin-bottom: 10px;">作者：{{artical.auther}}&nbsp;&nbsp;更新时间：{{artical.updateTime | date('Y-m-d H:i:s', -480, 'CCT') }}&nbsp;&nbsp;类别：{{artical.category}}</p>
+        <p style="padding: 10px; font-size: 16px;line-height: 30px;background-color: #eee;text-align: justify; color: #666;">{{artical.summary}}</p>
+      </div>
+      <div class="content">
+        {% autoescape %}{{ artical.content}}{% endautoescape %}
+      </div>
+    </div>
+    <script>
+    </script>
+	</body>
+</html>
+
+
