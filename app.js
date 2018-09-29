@@ -5,6 +5,8 @@ const bodyParser = require('body-parser') // 加载请求体的解析插件
 const app = express()
 const moment = require('./public/js/moment')
 const qrImg = require('qr-image')
+const Cookies = require('cookies')
+console.log(Cookies)
 global.db
 // 设置模板路径
 app.set('views', './views')
@@ -21,6 +23,18 @@ swig.setDefaults({
     }
   }
 })
+
+// 设置cookie中间件
+app.use(function (req, res, next) {
+  req.cookies = new Cookies(req, res)
+  if (!req.cookies.get('userInfo')) {
+    if (req.url.indexOf('/public') < 0 && req.url.indexOf('admin') >= 0 && req.url !== '/admin/login') {
+      return res.render('admin/login')
+    }
+  }
+  next()
+})
+
 // 配置静态文件路径
 app.use('/public', express.static(__dirname + '/public'))
 app.use('/uploads', express.static(__dirname + '/uploads'))
@@ -262,8 +276,7 @@ app.get('/articalList/:category', function (req, res, next) {
 })
 
 // 二维码生成
-app.get("/qrcode", async (req, res, next) => {
-  console.log(req.headers)
+app.get("/qrcode", function (req, res, next) {
     const qrcode = qrImg.image('http://'+req.headers.host + req.query.link, {
         ec_level: '30%',
         margin: 1
