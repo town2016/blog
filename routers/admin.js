@@ -347,6 +347,11 @@ router.get('/userDelete', function (req, res, next) {
 // 用户登录
 router.post('/login', function (req, res, next) {
   var params = req.body
+  if (!params.account) {
+    response.code = 500
+    response.message = '用户名或者密码错误'
+    res.json(response)
+  }
   User.find(params).then(function (docs) {
     if (docs.length === 0) {
       response.code = 500

@@ -30,6 +30,7 @@
 			  text-align: center;
 			  margin-bottom: 15px;
 			  font-size: 18px;
+			  font-weight: 500;
 			}
 			.iform .form-group .form-label{
 			  width: 60px;
@@ -41,7 +42,7 @@
 	</head>
 	<body>
 	  <div class="loginWrapper">
-      <h5>sign in</h5>
+      <h5>系统登录</h5>
       <div class="iform" id="loginForm"></div>
     </div>
 	</body>
@@ -50,17 +51,18 @@
 	      formModel = [
 	        {
             tag: 'input',
-            label: 'account',
+            label: '账户',
             prop: 'account',
             attrs: {
-              placeholder: 'please input your account'
+              placeholder: '请输入用户名',
+              autocomplete: false
             }
           }, {
             tag: 'input',
-            label: 'password',
+            label: '密码',
             prop: 'pwd',
             attrs: {
-              placeholder: 'please input your password',
+              placeholder: '请输入密码',
               type: 'password'
             }
           }
@@ -79,7 +81,9 @@
 	  function login () {
 	    var params = iform.datas
 	    var pwd = iform.datas.pwd
-	    params.pwd = md5(pwd)
+	    if (pwd) {
+	      params.pwd = md5(pwd)
+	    }
 	    $http.post('/admin/login', params).then(function (res) {
 	      if (res.data.code === 200) {
 	        window.location.href = '/admin'
@@ -91,5 +95,12 @@
 	      }
 	    })
 	  }
+	  eventHandler.addEvent(document.body, 'keydown', function () {
+	    if (event.keyCode === 13) {
+	      setTimeout(() => {
+	        login()
+	      }, 17)
+	    }
+	  })
 	</script>
 </html>

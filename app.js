@@ -6,7 +6,6 @@ const app = express()
 const moment = require('./public/js/moment')
 const qrImg = require('qr-image')
 const Cookies = require('cookies')
-console.log(Cookies)
 global.db
 // 设置模板路径
 app.set('views', './views')
@@ -29,7 +28,7 @@ app.use(function (req, res, next) {
   req.cookies = new Cookies(req, res)
   if (!req.cookies.get('userInfo')) {
     if (req.url.indexOf('/public') < 0 && req.url.indexOf('admin') >= 0 && req.url !== '/admin/login') {
-      return res.render('admin/login')
+      return res.redirect('/admin/login')
     }
   }
   next()
