@@ -36,6 +36,9 @@ getCategorys().then(function (res) {
   iform = new Iform(document.getElementById("articalForm"), formModel)
   // 表单验证
   validator = new Validater(document.getElementById(iform.id))
+  if (window.location.search) {
+    getDetail([window.location.search.split('=')[1]])
+  }
 })
 // 编辑器
 var wEditor = window.wangEditor
@@ -66,9 +69,7 @@ function save () {
   })
 }
 // 拉取详情
-if (window.location.search) {
-  getDetail([window.location.search.split('=')[1]])
-}
+
 function getDetail (params) {
   detailArtical(params).then(function (res) {
     iform.form.formData = res.data.data
