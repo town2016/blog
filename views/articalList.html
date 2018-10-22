@@ -1,7 +1,13 @@
 {% extends './layout.html' %} 
 {% block header %}
 <script src="/public/js/moment.js"></script>
+<link rel='stylesheet' href="/public/css/admin.css" />
 <link rel="stylesheet/less" href="/public/css/home.less" /> 
+<style>
+  .empty{
+    display: none;
+  }
+</style>
 {% endblock %} 
 {% block content %}
 <div class="main-content">
@@ -9,30 +15,68 @@
     <h5>文章列表</h5>
     <p class="desc">求知若渴，虚心若愚</p>
   </div>
-  {% if articals.length > 0 %}
-  <div class="article">
-    {% for key, artical in articals %}
-    <div class="article-item">
-      <a href="{{'/artical/' + artical._id}}">
+  <div class="article" id="articleList"></div>
+  <div class="empty" id="empty" style="text-align: center; font-size: 14px;color: #aaa; line-height: 50px;">
+    该查询条件下未搜索到结果
+  </div>
+  <div class="pager-container"></div>
+</div>
+<script src="/public/utils/common.js"></script>
+<script src="/public/utils/pager.js"></script>
+<script src="/public/js/admin/artical.js"></script>
+<script>
+// 文章分类
+var category = window.location.href.split('/articalList/')[1]
+// 创建分页
+var pager = new Pager(document.querySelector('.pager-container'), function (pageNum, pageSize) {
+  pageNation.pageNum = pageNum
+  pageNation.pageSize = pageSize
+  // 拉取所有文章
+  getArticalList(pageNation)
+})
+
+var pageNation = {
+  pageNum: pager.curPage,
+  pageSize: pager.pageSize
+}
+getArticalList(pageNation)
+function getArticalList (pageNation) {
+  var query = {
+    category: category,
+    pageNum: pageNation.pageNum,
+    pageSize: pageNation.pageSize
+  }
+  articalList(query).then(function (res) {
+    pager.pager.total = res.data.data.total
+    document.getElementById('articleList').innerHTML = updateArticalList(res.data.data.list)
+  })
+}
+
+function updateArticalList (list) {
+  if (list.length === 0) {
+    document.getElementById('empty').style.display = 'block'
+  } else {
+    document.getElementById('empty').style.display = 'none'
+  }
+  var html = ''
+  list.forEach(artical => {
+    html += 
+    `<div class="article-item">
+      <a href="/artical/${artical._id}">
         <div class="context">
           <div class="article-name">
-            <h5>{{artical.title}}</h5>
-            <span>{{artical.updateTime | date('Y-m-d H:i:s', -480, 'CCT') }}</span>
+            <h5>${artical.title}</h5>
+            <span>${ moment(new Date(artical.updateTime)).format('YYYY-MM-DD hh:mm:ss')}</span>
           </div>
-          <div class="article-intro">{{artical.summary}}</div>
+          <div class="article-intro">${artical.summary}</div>
         </div>
         <div class="code">
-          <img src="{{'/qrcode?link=/artical_m/' + artical._id}}" />
+          <img src="/qrcode?link=/artical_m/${artical._id}" />
         </div>
       </a>
-    </div>
-    {% endfor %}
-  </div>
-  {% else %}
-  <div class="empty" style="text-align: center; font-size: 14px;
-    color: #aaa; line-height: 50px;">该分类下暂无文章</div>
-  {% endif %}
-</div>
-<script>
+    </div>`
+  })
+  return html
+}
 </script>
 {% endblock %}

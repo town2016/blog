@@ -166,11 +166,12 @@ router.get('/articalAdd', function (req, res, next) {
 // 拉取文章列表
 router.get('/articals', function (req, res, next) {
   var limit = Number(req.query.pageSize || 5), skip = Number(req.query.pageNum || 1)
-  Artical.countDocuments({}, function (err, count) {
+  var catoroey = req.query.category &&  req.query.category !== 'all' ? {category: req.query.category} : {}
+  Artical.countDocuments(catoroey, function (err, count) {
     if (err) {
       console.log(err)
     } else {
-      Artical.find().limit(limit).skip((skip - 1) * limit).then(articals => {
+      Artical.find(catoroey).limit(limit).skip((skip - 1) * limit).then(articals => {
         response.data = {}
         response.data.total = count
         response.data.list = articals

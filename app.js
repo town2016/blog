@@ -27,7 +27,7 @@ swig.setDefaults({
 app.use(function (req, res, next) {
   req.cookies = new Cookies(req, res)
   if (!req.cookies.get('userInfo')) {
-    if (req.url.indexOf('/public') < 0 && req.url.indexOf('admin') >= 0 && req.url !== '/admin/login') {
+    if (req.url.indexOf('/public') < 0 && req.url.indexOf('admin') >= 0 && req.url !== '/admin/login' && req.url .indexOf('/admin/articals') < 0) {
       return res.redirect('/admin/login')
     }
   }
