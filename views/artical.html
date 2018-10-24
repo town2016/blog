@@ -2,6 +2,24 @@
 {% block header %}
 <script src="/public/js/moment.js"></script>
 <link rel="stylesheet/less" href="/public/css/home.less" /> 
+<style type="text/css">
+	.praise{
+	  border-radius: 20px;
+	  padding: 5px 20px;
+	  display: inline-block;
+	  color: #E13D13;
+	  line-height: 30px;
+	  box-shadow:0 0 5px rgba(225,61,19,0.3) ;
+	  cursor: pointer;
+	  transition: all .3s;
+	}
+	.praise span{
+	  margin-right: 5px;
+	}
+	.praise:hover{
+	  box-shadow:0 0 10px rgba(225,61,19,0.8) ;
+	}
+</style>
 {% endblock %} 
 {% block content %}
 <div class="main-content">
@@ -12,8 +30,24 @@
   </div>
   <div class="content">
     {% autoescape %}{{ artical.content}}{% endautoescape %}
+    <div align="center">
+      <div class="praise" onclick="praise()">
+        <span>赞一个吧</span>
+        <img src="../public/img/praise.png" height="30px" alt="赞一个吧" style="display: inline-block;vertical-align: middle;margin-top: -5px;"/>
+      </div>
+    </div>
   </div>
 </div>
 <script>
+var articalId = window.location.href.split('/artical/')[1]
+function praise() {
+  $http.post('/api/praise', {articalId: articalId}).then(res => {
+    console.log(res.data.message)
+    message.msg({
+      message: res.data.message,
+      type: res.data.code === 200 ? 'success' : 'error'
+    })
+  })
+}
 </script>
 {% endblock %}

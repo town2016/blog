@@ -3,6 +3,8 @@ const router = express.Router()
 const Question = require('../models/Question')
 const ClientIP = require('../models/ClientIP')
 const Email = require('../models/Email')
+const Praise = require('../models/Praise')
+const Statistics = require('../models/Statistics')
 const axios = require('axios')
 const nodemailer = require('nodemailer')
 var mailTransport = nodemailer.createTransport({
@@ -206,6 +208,16 @@ router.post('/visit', function (req, res, next) {
         res.json(response)
       })
     }
+    Statistics.find({}, function (err, docs) {
+      if (docs.length > 1) {
+        var visitNum = docs[0].visit + 1
+        docs[0].update({visit: visitNum}, function (err, sta) {
+          if (err) {
+            console.log(err)
+          }
+        })
+      }
+    })
   })
 })
 
@@ -222,8 +234,7 @@ router.post('/mailto', function (req, res, next) {
       response.code = 500
       response.data = err
       res.json(response)
-    }
-    else {
+    }else {
       if (req.body._id) {
         Email.updateOne({_id: req.body._id}, {status: 2, reply: req.body.reply}, function (uErr) {
           if (uErr) {
@@ -260,6 +271,16 @@ router.post('/mailto', function (req, res, next) {
         res.json(response)
       })
     }
+    Statistics.find({}, function (err, docs) {
+      if (docs.length > 1) {
+        var emailNum = docs[0].email + 1
+        docs[0].update({email: emailNum}, function (err, sta) {
+          if (err) {
+            console.log(err)
+          }
+        })
+      }
+    })
   })
 })
 // 邮件列表
@@ -311,3 +332,45 @@ router.get('/detailEmail/:id', function (req, res, next) {
 })
 
 module.exports = router
+
+// 点赞
+router.post('/praise', function (req, res, next) {
+  var articalId = req.body.articalId
+  Praise.findOne({articalId: articalId}, function (err, praise) {
+    if (praise) {
+      var count = praise.count++
+      praise.update({count: count}, function (err, doc) {
+        if (err) {
+          console.log(err)
+        } else {
+          response.message = '点赞成功,谢谢您对作者的支持'
+          res.json(response)
+          Statistics.find({}, function (err, docs) {
+            if (docs.length > 1) {
+              var praiseNum = docs[0].praise + 1
+              docs[0].update({praise: praiseNum}, function (err, sta) {
+                if (err) {
+                  console.log(err)
+                }
+              })
+            }
+          })
+        }
+      })
+    } else {
+      var praise = new Praise({
+        articalId: articalId,
+        count: 1
+      })
+      praise.save(function (doc) {
+        if (doc) {
+          response.message = '点赞成功,谢谢您对作者的支持'
+        } else {
+          response.message = '网络繁忙，稍后重试'
+        }
+        res.json(response)
+      })
+    }
+  })
+})
+

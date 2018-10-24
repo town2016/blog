@@ -70,207 +70,150 @@ const ClientIP = require('./models/ClientIP')
 const Category = require('./models/Category')
 const Artical = require('./models/Artical')
 const Email = require('./models/Email')
+const Statistics = require('./models/Statistics')
 // 渲染首页
 app.get('/', function (req, res, next) {
-  Email.countDocuments({}, function (err, emails) {
-    if (err) {
-      console.log(err)
-    } else {
-      Question.find().limit(3).then(function (list) {
-        ClientIP.find({}, function (err, views) {
-          let count = 0
-          if (err) {
-            console.log(err)
-          } else {
-            views.forEach(item => {
-              count += item.count
-            })
-          }
-          Category.find({}, function (err, categorys) {
-            let responseData = {
-              title: '个人博客__town',
-              questions: list,
-              emails: emails,
-              dateLength: Math.ceil((new Date().getTime() - blog_createTime) / 86400000),
-              viewCount: count,
-              nav: [
-                {
-                  name: '首页',
-                  path: '/'
-                }
-              ]
-            }
-            categorys.forEach(item => {
-              responseData.nav.push({
-                name: item.categoryName,
-                path: `/${item.categoryCode}`,
-                num: item.count
-              })
-            })
-            Artical.find({}).sort({'updateTime': -1}).limit(3).exec(function (err, articals) {
-              if (err) {
-                console.log(err)
-              } else {
-                responseData.articals = articals
-                res.render('index', responseData)
+    Question.find().limit(3).then(function (list) {
+      Statistics.find({}, function (err, statistics) {
+        var statistic = statistics[0]
+        let count = 0
+        if (err) {
+          console.log(err)
+        }
+        // 分类列表
+        Category.find({}, function (err, categorys) {
+          let responseData = {
+            title: '个人博客__town',
+            questions: list,
+            emails: statistic.email,
+            praises: statistic.praise,
+            dateLength: Math.ceil((new Date().getTime() - blog_createTime) / 86400000),
+            viewCount: statistic.visit,
+            nav: [
+              {
+                name: '首页',
+                path: '/'
               }
+            ]
+          }
+          categorys.forEach(item => {
+            responseData.nav.push({
+              name: item.categoryName,
+              path: `/${item.categoryCode}`,
+              num: item.count
             })
           })
           
+          // 文章列表
+          Artical.find({}).sort({'updateTime': -1}).limit(3).exec(function (err, articals) {
+            if (err) {
+              console.log(err)
+            } else {
+              responseData.articals = articals
+              res.render('index', responseData)
+            }
+          })
+          
         })
-      })  
-    }
-  })
+      })
+    }) 
 })
 
 // 渲染文章详情页
 app.get('/artical/:id', function (req, res, next) {
-  Email.count({}, function (err, emails) {
+  Statistics.find({}, function (err, statistics) {
+    var statistic = statistics[0]
+    let count = 0
     if (err) {
       console.log(err)
-    } else {
-      ClientIP.find({}, function (err, views) {
-        let count = 0
-        if (err) {
-          console.log(err)
-        } else {
-          views.forEach(item => {
-            count += item.count
-          })
-        }
-        Category.find({}, function (err, categorys) {
-          let responseData = {
-            title: '个人博客__town',
-            emails: emails,
-            dateLength: Math.ceil((new Date().getTime() - blog_createTime) / 86400000),
-            viewCount: count,
-            nav: [
-              {
-                name: '首页',
-                path: '/'
-              }
-            ]
+    }
+    Category.find({}, function (err, categorys) {
+      let responseData = {
+        title: '个人博客__town',
+        emails: statistic.email,
+        praises: statistic.praise,
+        dateLength: Math.ceil((new Date().getTime() - blog_createTime) / 86400000),
+        viewCount: statistic.visit,
+        nav: [
+          {
+            name: '首页',
+            path: '/'
           }
-          categorys.forEach(item => {
-            responseData.nav.push({
-              name: item.categoryName,
-              path: `/${item.categoryCode}`,
-              num: item.count
-            })
-          })
-          var id = req.params.id
-          Artical.findById(id, function (err, artical) {
-            responseData.artical = {}
-            if (err) {
-              responseData.artical.content = '未找到该文章，请确认文章是否存在'
-            } else {
-              responseData.artical = artical
-            }
-            res.render('artical', responseData)
-          })
+        ]
+      }
+      categorys.forEach(item => {
+        responseData.nav.push({
+          name: item.categoryName,
+          path: `/${item.categoryCode}`,
+          num: item.count
         })
       })
-    }
+      var id = req.params.id
+      Artical.findById(id, function (err, artical) {
+        responseData.artical = {}
+        if (err) {
+          responseData.artical.content = '未找到该文章，请确认文章是否存在'
+        } else {
+          responseData.artical = artical
+        }
+        res.render('artical', responseData)
+      })
+    })
   })
 })
 // 渲染文章详情页
 app.get('/artical_m/:id', function (req, res, next) {
-  Email.count({}, function (err, emails) {
+  var id = req.params.id, responseData = {};
+  Artical.findById(id, function (err, artical) {
+    responseData.artical = {}
     if (err) {
-      console.log(err)
+      responseData.artical.content = '未找到该文章，请确认文章是否存在'
     } else {
-      ClientIP.find({}, function (err, views) {
-        let count = 0
-        if (err) {
-          console.log(err)
-        } else {
-          views.forEach(item => {
-            count += item.count
-          })
-        }
-        Category.find({}, function (err, categorys) {
-          let responseData = {
-            title: '个人博客__town',
-            emails: emails,
-            dateLength: Math.ceil((new Date().getTime() - blog_createTime) / 86400000),
-            viewCount: count,
-            nav: [
-              {
-                name: '首页',
-                path: '/'
-              }
-            ]
-          }
-          categorys.forEach(item => {
-            responseData.nav.push({
-              name: item.categoryName,
-              path: `/${item.categoryCode}`,
-              num: item.count
-            })
-          })
-          var id = req.params.id
-          Artical.findById(id, function (err, artical) {
-            responseData.artical = {}
-            if (err) {
-              responseData.artical.content = '未找到该文章，请确认文章是否存在'
-            } else {
-              responseData.artical = artical
-            }
-            res.render('artical_m', responseData)
-          })
-        })
-      })
+      responseData.artical = artical
     }
+    res.render('artical_m', responseData)
   })
 })
 
 // 文章列表页
 app.get('/articalList/:category', function (req, res, next) {
-  Email.count({}, function (err, emails) {
+  Statistics.find({}, function (err, statistics) {
+    var statistic = statistics[0]
+    let count = 0
     if (err) {
       console.log(err)
-    } else {
-      ClientIP.find({}, function (err, views) {
-        let count = 0
+    }
+    Category.find({}, function (err, categorys) {
+      let responseData = {
+        title: '个人博客__town',
+        emails: statistic.email,
+        praises: statistic.praise,
+        dateLength: Math.ceil((new Date().getTime() - blog_createTime) / 86400000),
+        viewCount: statistic.visit,
+        nav: [
+          {
+            name: '首页',
+            path: '/'
+          }
+        ]
+      }
+      categorys.forEach(item => {
+        responseData.nav.push({
+          name: item.categoryName,
+          path: `/${item.categoryCode}`,
+          num: item.count
+        })
+      })
+      var query = req.params.category === 'all' ? {} : {category: req.params.category}
+      Artical.find(query).sort({'updateTime': -1}).limit(15).exec(function (err, articals) {
         if (err) {
           console.log(err)
         } else {
-          views.forEach(item => {
-            count += item.count
-          })
+          responseData.articals = articals || []
+          res.render('articalList', responseData)
         }
-        Category.find({}, function (err, categorys) {
-          let responseData = {
-            title: '个人博客__town',
-            emails: emails,
-            dateLength: Math.ceil((new Date().getTime() - blog_createTime) / 86400000),
-            viewCount: count,
-            nav: [
-              {
-                name: '首页',
-                path: '/'
-              }
-            ]
-          }
-          categorys.forEach(item => {
-            responseData.nav.push({
-              name: item.categoryName,
-              path: `/${item.categoryCode}`,
-              num: item.count
-            })
-          })
-          var query = req.params.category === 'all' ? {} : {category: req.params.category}
-          Artical.find(query).sort({'updateTime': -1}).limit(15).exec(function (err, articals) {
-            if (err) {
-              console.log(err)
-            } else {
-              responseData.articals = articals || []
-              res.render('articalList', responseData)
-            }
-          })
-        })
       })
-    }
+    })
   })
 })
 

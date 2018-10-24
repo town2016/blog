@@ -55,9 +55,9 @@
               <div class="rating flex-1">
                 <ul class="clearfix">
                   <li>
-                    <a href="javascript:;" title="浏览量">
+                    <a href="javascript:;" title="点赞">
                       <embed src='/public/img/svg/card-zan.svg' type="image/svg+xml" width="16" height="14"></embed>
-                      <span>6</span>
+                      <span>{{praises}}</span>
                     </a>
                   </li>
                   <li>
@@ -67,7 +67,7 @@
                     </a>
                   </li>
                   <li>
-                    <a href="javascript:;" title="点赞">
+                    <a href="javascript:;" title="浏览量">
                       <embed src='/public/img/svg/card-liulan.svg' type="image/svg+xml" width="16" height="14"></embed>
                       <span>{{viewCount}}</span>
                     </a>
@@ -169,7 +169,7 @@
         </div>
       </div>
     </div>
-    <audio src="" id="player" autoplay></audio>
+    <audio src="" id="player"></audio>
   </body>
   <script>
     var activeForm = ''
@@ -263,7 +263,7 @@
       let control = document.getElementById('audioControl')
       player.src = list[0].purl
       player.name = 0
-      player.play()
+      // player.play()
       control.classList.add('play')
       player.addEventListener('ended', function() {
         var index = player.name * 1 + 1
