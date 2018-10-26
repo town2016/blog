@@ -5,8 +5,11 @@ const ClientIP = require('../models/ClientIP')
 const Email = require('../models/Email')
 const Praise = require('../models/Praise')
 const Statistics = require('../models/Statistics')
+const Task = require('../models/Task')
 const axios = require('axios')
 const nodemailer = require('nodemailer')
+const schedule = require('node-schedule')
+const scheduleMap = {}
 var mailTransport = nodemailer.createTransport({
     host : 'smtp.sina.com',
     secureConnection: true, // 使用SSL方式（安全方式，防止被窃取信息）
@@ -285,11 +288,12 @@ router.post('/mailto', function (req, res, next) {
 })
 // 邮件列表
 router.get('/emailList', function (req, res, next) {
-  var limit = Number(req.body.pageSize),skip = (Number(req.body.pageNum) - 1) * limit;
+  var limit = Number(req.query.pageSize),skip = (Number(req.query.pageNum) - 1) * limit;
   Email.countDocuments({}, function (er, count) {
     if (er) {
       console.log(er)
     } else {
+      console.log(limit)
       Email.find({}).sort({createTime: '-1'}).limit(limit).skip(skip).exec(function (err, emails) {
         if (err) {
           response.code = 500
@@ -373,4 +377,109 @@ router.post('/praise', function (req, res, next) {
     }
   })
 })
+// 创建定时任务
+router.post('/createSchedule', function (req, res) {
+  var params = req.body;
+  var taskName = 'task_' + new Date().getTime();
+  params.taskName = taskName
+  createTask(params)
+  var taskModel = new Task({
+    taskName: params.taskName,
+    hour: params.hour,
+    minute: params.minute,
+    content: params.content,
+    email: params.email
+  })
+  taskModel.save().then((err, row) => {
+    if (!err) {
+      response.message = '任务设置失败',
+      response.code = 500
+    } else {
+      response.message = '任务设置成功'
+    }
+    res.json(response)
+  })
+})
 
+function createTask (params) {
+  var hour = params.hour;
+  var minute = params.minute;
+  var rule = new schedule.RecurrenceRule();
+  rule.dayOfWeek = [1, new schedule.Range(1, 5)];
+  rule.hour = hour;
+  rule.minute = minute;
+  var html = `<div style='max-width: 600px;'>
+                <h3>消息提醒</h3>
+                <p>老板你好:</p>
+                <div style='text-indent: 24px;width: 600px;'>
+                  我是你的智能助理,现在是${hour}点${minute}分,你的行程安排为您呈上.<h4 style='color: red'>"${params.content}"</h4>
+                </div>
+                <p style='max-width: 600px;'>
+                  <a href='http://blog.szinneractive.cn:8088/taskList'>设置更多任务?猛戳这里!!!</a>
+                  <span>or</span>
+                  <a href='http://blog.szinneractive.cn:8088/'>猛戳这里,有更多惊喜</a>
+                </p>
+                <div class='nav' style='line-height:30px;max-width: 600px;'>
+                  <img src='http://blog.szinneractive.cn:8088/public/img/308921807767887092.jpg' height='20px' style='display:inline-block;vertical-align:middle;margin-right:20px;'/>
+                  <span style='display:inline-block;vertical-align:middle'>该服务由<a href='http://www.szinneractive.cn/'>深圳互动深世界科技有限公司</a>提供</span>
+                </div>
+                <div style='text-align: right;max-width: 600px;'>发件人:您的私人助理</div>
+              <div>`
+  var task = schedule.scheduleJob(rule, function(){
+    var url = 'http://blog.szinneractive.cn:8088/api/mailto'
+　　axios.post(url, {
+        senderEmail: params.email,
+        nickName: '私人助理',
+        html: html,
+        subject: `消息提醒:${params.content.substr(0,10)}......`,
+        to: params.email
+    }).then(res => {}).catch(e => {
+      console.log(e)
+    })
+  });
+  scheduleMap[params.taskName] = task
+}
+
+//  拉取定时任务
+router.get('/taskList', function (req, res) {
+  var params = req.query || {}
+  Task.find(params, function (err, docs) {
+    if (err) return console.log(err)
+    response.data = docs
+    res.json(response)
+  })
+})
+// 删除定时任务
+router.get('/deleteTaskById', function (req, res) {
+  var id = req.query.id
+  Task.findById(id, function (err, row) {
+    if (err) {
+      response.message = '删除的记录不存在'
+      response.code = 500
+      res.json(response)
+    } else {
+      taskName = row.taskName
+      Task.remove({_id: id}).then(function (doc) {
+        if (!doc) {
+          response.message = '删除失败'
+          response.code = 500
+        } else {
+          response.message = '删除成功'
+          scheduleMap[row.taskName].cancel()
+          delete scheduleMap[row.taskName]
+        }
+        res.json(response)
+      })
+    }
+  })
+})
+// 服务器重启时重新设置定时任务
+Task.find({}, function (err, docs) {
+  if (err) {
+    console.log(err)
+    return
+  }
+  docs.map(item => {
+    createTask(item)
+  })
+})

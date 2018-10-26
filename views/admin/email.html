@@ -34,6 +34,7 @@ var pageNation = {
   pageNum: pager.curPage,
   pageSize: pager.pageSize
 }
+console.log(pageNation)
 getEamils(pageNation)
 function getEamils (pageNation) {
   emailList(pageNation).then(function (res) {

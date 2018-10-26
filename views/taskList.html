@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="keywords" content="深圳，深圳互动，深互动，深世界，town，blog，博客，个人博客，Vue，node，JS，HTML，CSS，IT技术，sz" />
+    <meta name="description" content="个人前端技术博客，主要记录自己的前端学习中遇到的问题，和一些前端技术的学习笔记。网站目前挂在深圳互动深世界科技有限公司，深圳互动深世界是一家依托于互联网的高新技术科技公司，公司目前的核心业务为深圳本地生活服务，为深圳人提供生活中需要的各种信息的查询，类似于深圳本地宝的信息平台" />
+    <title>私人助理</title>
+    <link rel="stylesheet/less" type="text/css" href="/public/css/reset.less" />
+    <link rel="stylesheet/less" type="text/css" href="/public/css/index.less" />
+    <link rel="stylesheet/less" type="text/css" href="/public/css/admin.less" />
+    <link rel="shortcut icon" href="/public/css/favicon.ico" />
+    <link rel="stylesheet" href="/public/css/icon.css" />
+    <script src="/public/js/axios.min.js"></script>
+    <script src="/public/js/jquery-1.11.0.js"></script>
+    <script src="/public/utils/$http.js"></script>
+    <script src="/public/js/less.min.js"></script>
+    <script src="/public/utils/common.js"></script>
+    <script src="/public/utils/message.js"></script>
+    <script src="/public/utils/form.js"></script>
+    <script src="/public/utils/validate.js"></script>
+    <style type="text/css" lang="less">
+      .container {
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        width: 90%;
+        max-width: 750px;
+        transform: translate3d(-50%, 0%, 0);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        padding: 10px 20px 30px 20px;
+        box-sizing: border-box;
+      }
+      .container h3{
+        cursor: pointer;
+      }
+      .container .color{
+        background-image: -webkit-gradient(linear, left center, right center, from(rgba(176, 31, 184, 1)), to(rgba(255, 189, 76, 1)));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .container h3, .container .header span{
+        font-weight: 400;
+        color: #333;
+        display: inline-block;
+        font-weight: 600;
+      }
+      
+      .container .header {
+        padding-bottom: 10px;
+        border-bottom: 1px solid #dedede;
+        margin-bottom: 10px;
+      }
+      .hour {
+        float: left;
+      }
+      
+      .minute {
+        float: right;
+      }
+      
+      .form-group {
+        min-width: auto;
+      }
+      .iform .form-group .form-label{
+        width: 60px;
+      }
+      .iform .form-group .form-control{
+        margin: 0;
+      }
+      
+      .iform {
+        width: 100%;
+      }
+      .btns{
+        padding-left: 85px;
+        padding-right: 10px;
+      }
+      .btn {
+        display: inline-block;
+        padding: 5px 15px;
+        font-size: 14px;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 4px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        cursor: default;
+        margin-right: 10px;
+      }
+      
+      .btn.block {
+        display: block;
+        text-align: center;
+        box-sizing: border-box;
+        width: 100%;
+        height: 40px;
+      }
+      
+      .btn:hover {
+        opacity: 0.8;
+        /*-ms-filter: progid:DXImageTransform.Microsoft.Alpha(opacity=(80));*/
+        /*filter: alpha(opacity = (80));*/
+      }
+      
+      .btn.btn-success {
+        background-color: #67c23a;
+        border-color: #67c23a;
+        color: #fff;
+      }
+      
+      .btn.btn-primary {
+        background-color: #409EFF;
+        border-color: #409EFF;
+        color: #fff;
+      }
+      .box{
+        height: 306px;
+        width: 90%;
+        position: relative;
+      }
+      .wrapper{
+        transform: rotateY(-180deg);
+        backface-visibility: hidden;
+        background-color: #fff;
+        transition: all 1s;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        bottom: 0;
+        overflow: auto;
+      }
+      .wrapper.active{
+        transform: rotateY(0deg);
+        backface-visibility: visible;
+      }
+      .task-item{
+        padding: 10px 0;
+        border-bottom: 1px solid #E5E5E5;
+      }
+      .task-item:hover{
+        background-color: #E5E5E5;
+      }
+      .intro{
+        text-align: left;
+        color: #333;
+        font-size: 14px;
+        word-break: break-all;
+        padding-left: 5px;
+        text-align: justify;
+      }
+      .times ,.cancel{
+        text-align: center;
+      }
+      .times{
+        width: 70px;
+        color: #aaa;
+      }
+      .cancel{
+        width: 30px;
+        color: red;
+        cursor: pointer;
+        opacity: 0.5;
+        transition: all .5s;
+      }
+      .cancel:hover{
+        opacity: 1;
+        transform-origin: center;
+      }
+      textarea{
+        resize: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header" align="center">
+        <h3 class="color" id='create-wrapper'>Create Task</h3> <span class="color">&nbsp;/ &nbsp;</span> <h3 id="list-wrapper" onclick="getTaskList()">Task List</h3>
+      </div>
+      <div class="box">
+        <div class="create-wrapper wrapper active">
+          <div id="task-form" class="iform clearfix"></div>
+          <div class="btns">
+            <button class="btn btn-primary block" onclick="setTask()">新增</button>
+          </div>
+        </div>
+        <div class="list-wrapper wrapper">
+          <ul class="taskList"></ul>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    var h3s = document.querySelectorAll('h3')
+    var wrappers = document.querySelectorAll('.wrapper')
+    h3s.forEach(item => {
+      item.addEventListener('click', function () {
+        h3s.forEach((el) => {
+          el.classList.remove('color')
+        })
+        this.classList.add('color')
+        wrappers.forEach(item => {
+          if (item.classList.contains(this.id)) {
+            item.classList.add("active")
+          } else {
+            item.classList.remove("active")
+          }
+        })
+      })
+    })
+    var loginForm = document.getElementById('task-form'),
+      formModel = [{
+        tag: 'textarea',
+        label: '提醒信息',
+        prop: 'content',
+        attrs: {
+          placeholder: '请输入您的安排',
+          autocomplete: false
+        },
+        dataset: {
+          required: true
+        }
+      }, {
+        tag: 'input',
+        label: '收件邮箱',
+        prop: 'email',
+        attrs: {
+          placeholder: '请输入提醒邮箱',
+          autocomplete: false
+        },
+        dataset: {
+          required: true,
+          email: true
+        }
+      }, {
+        tag: 'select',
+        label: '时间点',
+        prop: 'hour',
+        col: 'label',
+        colValue: 'value',
+        attrs: {
+          class: 'hour'
+        },
+        dataset: {
+          required: true
+        },
+        options: initNums(24)
+      }, {
+        tag: 'select',
+        prop: 'minute',
+        col: 'label',
+        colValue: 'value',
+        attrs: {
+          class: 'minute'
+        },
+        dataset: {
+          required: true
+        },
+        options: initNums(60)
+      }]
+    var iform = new Iform(loginForm, formModel)
+    // 表单验证
+    var validator = new Validater(document.getElementById(iform.id))
+    function initNums(length) {
+      var arr = []
+      for(var i = 0; i < length; i++) {
+        var num = i < 10 ? '0' + i : i
+        arr.push({
+          label: num,
+          value: num
+        })
+      }
+      return arr
+    }
+    function setTask () {
+      if (!validator.check()) return
+      var params = iform.datas
+      axios.post('/api/createSchedule', params).then(res => {
+        if (res.data.code === 200) {
+          message.msg({
+            message: '任务设置成功',
+            type: 'success'
+          })
+        }
+      })
+    }
+    // 拉取任务列表
+    function getTaskList (params = {}) {
+      axios.get('/api/taskList', params).then(res => {
+        if (res.data.code === 200) {
+          createTaskList(res.data.data)
+        }
+      })
+    }
+    // 创建任务列表Html
+    var taskList = document.querySelector('.taskList')
+    function createTaskList(list) {
+      var html = ''
+      list.forEach(function (item, index) {
+        html += `<li class="task-item flex .flex-align-center" id='${item._id}'>
+                  <div class="intro flex-1">${item.content}</div>
+                  <div class="times">${item.hour > 10 ? item.hour : '0' + item.hour}:${item.minute > 10 ? item.minute : '0' + item.minute}</div>
+                  <div class="cancel" data-index='${index}'  onclick='deleteTask("${item._id}")'>X</div>
+                </li>`   
+      })
+      if (list.length === 0) {
+        html += '<li style="text-align:center;color: #aaa">暂无任务</li>'
+      }
+      taskList.innerHTML = html
+    }
+    // 删除任务
+    function  deleteTask (id) {
+      axios.get(`/api/deleteTaskById?id=${id}`).then(function (res) {
+        if (res.data.code === 200) {
+          message.msg({
+            message: res.data.message,
+            type: 'success'
+          })
+          document.getElementById(id).remove()
+        } else {
+          message.msg({
+            message: res.data.message,
+            type: 'error'
+          })
+        }
+      })
+    }
+  </script>
+
+</html>

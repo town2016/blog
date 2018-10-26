@@ -14,7 +14,11 @@ function Iform (mount, formModel, btns) {
     }
   }
   this.create(mount)
+  this.reset = function () {
+    document.getElementById(this.id).reset()
+  }
 }
+
 Iform.prototype.create = function (mount) {
   var form = document.createElement('form'), that = this
   form.id = that.id

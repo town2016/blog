@@ -226,3 +226,8 @@ app.get("/qrcode", function (req, res, next) {
     res.type("png");
     qrcode.pipe(res);
 });
+
+// 定时任务页
+app.get('/taskList', function (req, res) {
+  res.render('taskList', {})
+})

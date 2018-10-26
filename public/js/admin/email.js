@@ -129,8 +129,8 @@ const formModel = [
   }
 }]
 // 拉取所有邮件
-function emailList () {
-  return $http.get('/api/emailList')
+function emailList (params) {
+  return $http.get('/api/emailList', params)
 }
 // 删除邮件
 function deleteEmail (params) {
