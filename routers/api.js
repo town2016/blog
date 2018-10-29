@@ -402,8 +402,8 @@ router.post('/createSchedule', function (req, res) {
 })
 
 function createTask (params) {
-  var hour = params.hour;
-  var minute = params.minute;
+  var hour = params.hour
+  var minute = params.minute
   var rule = new schedule.RecurrenceRule();
   rule.dayOfWeek = [1, new schedule.Range(1, 5)];
   rule.hour = hour;
@@ -412,7 +412,7 @@ function createTask (params) {
                 <h3>消息提醒</h3>
                 <p>老板你好:</p>
                 <div style='text-indent: 24px;width: 600px;'>
-                  我是你的智能助理,现在是${hour}点${minute}分,你的行程安排为您呈上.<h4 style='color: red'>"${params.content}"</h4>
+                  我是你的智能助理,现在是${hour > 10 ? hour : '0' + hour}点${minute > 10 ? minute : '0' + minute}分,你的行程安排为您呈上:<h4 style='color: red'>"${params.content}"</h4>
                 </div>
                 <p style='max-width: 600px;'>
                   <a href='http://blog.szinneractive.cn:8088/taskList'>设置更多任务?猛戳这里!!!</a>
@@ -420,7 +420,7 @@ function createTask (params) {
                   <a href='http://blog.szinneractive.cn:8088/'>猛戳这里,有更多惊喜</a>
                 </p>
                 <div class='nav' style='line-height:30px;max-width: 600px;'>
-                  <img src='http://blog.szinneractive.cn:8088/public/img/308921807767887092.jpg' height='20px' style='display:inline-block;vertical-align:middle;margin-right:20px;'/>
+                  <img src='http://blog.szinneractive.cn:8088/public/img/308921807767887092.jpg' height='20px' style='display:inline-block;vertical-align:middle;margin-right:5px;'/>
                   <span style='display:inline-block;vertical-align:middle'>该服务由<a href='http://www.szinneractive.cn/'>深圳互动深世界科技有限公司</a>提供</span>
                 </div>
                 <div style='text-align: right;max-width: 600px;'>发件人:您的私人助理</div>
