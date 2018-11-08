@@ -2,7 +2,7 @@ function Pager(mount, fn) {
   let that = this
   this.id = 'pager_' + new Date().getTime()
   this.curPage = 1
-  this.pageSize = 5
+  this.pageSize = 10
   this.pages = [5, 10, 20, 30]
   this.events = {}
   this.pager = {

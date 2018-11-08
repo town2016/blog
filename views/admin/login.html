@@ -15,15 +15,61 @@
     <script src="/public/utils/message.js"></script>
 		<title>博客管理系统-登录</title>
 		<style type="text/css">
+		  body{
+		    position: relative;
+		    overflow: hidden;
+		    
+		  }
+		  .canvas{
+		    position: absolute;
+		    width: 100%;
+		    left: 0;
+		    top: 0;
+		    bottom: 0;
+		    z-index:1;
+		  }
+		  .canvas span{
+        position: absolute;
+        top: 0%;
+        left: 50%;
+        opacity: 0.8;
+      }
+      .canvas span:nth-child(4n) {
+        width: 8px;
+        height: 8px;
+        background-color: #162A62;
+        border-radius: 50%;
+        &:before{
+          display: none;
+        }
+      }
+      .canvas span:nth-child(2n):before{
+        content: '';
+        width: 0;
+        margin-left: -12px;
+        border-style: solid;
+        border-width: 0 5px 10px 5px;
+        border-color: transparent transparent #DD6161 transparent;
+      }
+      .canvas span:nth-child(3n){
+        width:10px;
+        height: 10px;
+        background-color: #63ba4d;
+        &:before{
+          display: none;
+        }
+      }
 			.loginWrapper{
 			  position: absolute;
 			  width: 400px;
 			  padding: 15px 20px 30px 20px;
+			  background-color: #fff;
 			  box-shadow: 0 0 10px rgba(0,0,0,0.2);
 			  top: 30%;
 			  left: 50%;
 			  margin-left: -200px;
 			  border-radius: 4px;
+			  z-index: 5
 			}
 			.loginWrapper h5{
 			  line-height: 30px;
@@ -41,6 +87,7 @@
 		</style>
 	</head>
 	<body>
+	  <div class="canvas" id="canvas"></div>
 	  <div class="loginWrapper">
       <h5>系统登录</h5>
       <div class="iform" id="loginForm"></div>
@@ -102,5 +149,45 @@
 	      }, 17)
 	    }
 	  })
+	  window.onload = function () {
+	    createItem()
+	    var spans = document.getElementsByClassName('shape')
+	    for (var i = 0; i < spans.length; i++) {
+	      var item = spans[i]
+	      createAnimation(item, i)
+	    }
+	  }
+	  function createItem () {
+	    var i = 60;
+	    var html = ''
+	    while(i) {
+	      html += '<span class="shape"></span>'
+	      i--
+	    }
+	    document.getElementById("canvas").innerHTML = html
+	  }
+	  function createAnimation (shape, index) {
+      var iSpeedLeft = Math.floor(Math.random() * 10)
+      var iSpeedTop = Math.floor(Math.random() * 10)
+      var colors = ['#ff000', '#DD6161', '#409EFF', '#63ba4d', '#C6E2FF', '#FF0000', '#13CE66', '#162A62']
+      setInterval(() => {
+        var colorIndex = Math.floor(Math.random() * 8)
+        if (shape.offsetLeft >= document.documentElement.clientWidth - shape.offsetWidth - 10 || shape.offsetLeft < 0) {
+          iSpeedLeft = -iSpeedLeft
+          shape.style.backgroundColor = colors[colorIndex]
+        }
+        if (shape.offsetTop >= document.documentElement.clientHeight - shape.offsetHeight - 10 || shape.offsetTop < 0) {
+          iSpeedTop = -iSpeedTop
+          shape.style.backgroundColor = colors[colorIndex]
+        }
+        if (index % 3 === 0) {
+          shape.style.left = shape.offsetLeft + iSpeedLeft + 'px'
+          shape.style.top = shape.offsetTop + iSpeedTop + 'px'
+        } else {
+          shape.style.left = shape.offsetLeft - iSpeedLeft + 'px'
+          shape.style.top = shape.offsetTop - iSpeedTop + 'px'
+        }
+      }, 50)
+    }
 	</script>
 </html>
