@@ -359,7 +359,7 @@ router.post('/login', function (req, res, next) {
       response.message = '用户名或者密码错误'
       response.data = docs
     } else {
-      req.cookies.set('userInfo', JSON.stringify(docs[0]))
+      req.cookies.set('userInfo', JSON.stringify(docs[0]), {maxAge: 1000 * 60 * 60 * 24})
       response.message = '操作成功'
     }
     res.json(response)

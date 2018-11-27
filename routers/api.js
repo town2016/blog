@@ -293,7 +293,6 @@ router.get('/emailList', function (req, res, next) {
     if (er) {
       console.log(er)
     } else {
-      console.log(limit)
       Email.find({}).sort({createTime: '-1'}).limit(limit).skip(skip).exec(function (err, emails) {
         if (err) {
           response.code = 500
@@ -366,8 +365,8 @@ router.post('/praise', function (req, res, next) {
         articalId: articalId,
         count: 1
       })
-      praise.save(function (doc) {
-        if (doc) {
+      praise.save(function (err ,doc) {
+        if (!err) {
           response.message = '点赞成功,谢谢您对作者的支持'
         } else {
           response.message = '网络繁忙，稍后重试'

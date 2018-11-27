@@ -1,4 +1,4 @@
-eventHandler = {
+const eventHandler = {
   // 页面加载完成后
   readyEvent: function(fn) {
     if(fn == null) {
